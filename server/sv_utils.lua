@@ -70,4 +70,4 @@ if not LoadResourceFile(GetCurrentResourceName(), 'web/dist/index.html') then
     print(err)
 end
 
-VersionCheck("")
+VersionCheck("vipexv/vReports")
