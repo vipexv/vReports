@@ -1,10 +1,10 @@
 import { Divider, SegmentedControl } from "@mantine/core";
 import { Flag, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { MdLeaderboard } from "react-icons/md";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
-import { MdLeaderboard } from "react-icons/md";
 
 import {
   Cloud,
@@ -40,6 +40,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Reports from "./reports";
 
 debugData([
   {
@@ -48,17 +49,19 @@ debugData([
   },
 ]);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const reports = Array.from({ length: 100 }, (_, index) => ({
-  id: index,
-  description: "Very Very racist!",
-  state: {
-    concluded: false,
-  },
-}));
+interface views {
+  [key: string]: React.ComponentType;
+}
+
+const views: views = {
+  reports: Reports,
+};
 
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
+  const [currentTab, setCurrentTab] = useState("reports");
+
+  const CurrentView = views[currentTab];
 
   useNuiEvent<boolean>("setVisible", setVisible);
 
@@ -80,7 +83,7 @@ const App: React.FC = () => {
   return (
     <>
       <div className="flex w-[100dvw] h-[100dvh] justify-center items-center">
-        <div className="min-w-[45dvw] min-h-[35dvw] bg-primary rounded-[2px]">
+        <div className="min-w-[50dvw] min-h-[35dvw] bg-primary rounded-[2px]">
           <div className="flex items-center">
             <h1 className="m-2 relative flex justify-center bg-secondary items-center rounded px-4 py-1 font-main text-white text-lg border-[2px]">
               <ShieldAlert size={18} className="mr-1 text-blue-400" />
@@ -180,7 +183,10 @@ const App: React.FC = () => {
           <div className="flex justify-center items-center mt-2">
             <SegmentedControl
               className="border-[2px] bg-secondary"
-              defaultValue="reports"
+              value={currentTab}
+              onChange={(e) => {
+                setCurrentTab(e);
+              }}
               data={[
                 {
                   value: "reports",
@@ -211,7 +217,10 @@ const App: React.FC = () => {
               ]}
             />
           </div>
-          <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5"></div>
+          <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
+            {CurrentView && <CurrentView />}
+          </div>
+          <p className="font-main flex justify-end m-2">v1.0.0</p>
         </div>
       </div>
     </>
