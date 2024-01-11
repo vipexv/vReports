@@ -3,7 +3,9 @@ import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
+import { Separator } from "@/components/ui/separator";
 import "./App.css";
+import { MessageSquareWarning, ShieldAlert } from "lucide-react";
 
 debugData([
   {
@@ -33,9 +35,19 @@ const App: React.FC = () => {
   }, [visible]);
 
   return (
-    <div className="absolute top-2 right-2 font-main text-xl p-2 rounded text-center">
-      Example.
-    </div>
+    <>
+      <div className="flex w-[100dvw] h-[100dvh] justify-center items-center">
+        <div className="min-w-[45dvw] min-h-[35dvw] bg-primary">
+          <div className="flex items-center">
+            <h1 className="m-2 relative flex justify-center items-center p-1 bg-secondary` bg-opacity-50 font-main text-white text-xl border">
+              <ShieldAlert size={18} className="mr-1 text-red-500" />
+              Report Menu
+            </h1>
+          </div>
+          <Separator />
+        </div>
+      </div>
+    </>
   );
 };
 
