@@ -20,6 +20,8 @@ client_scripts {
 }
 
 server_scripts {
+	"server/modules/**/*",
+	"server/classes/**/*",
 	"server/versionChecker.lua",
 	"server/sv_utils.lua",
 	"server/Classes/**/*",
