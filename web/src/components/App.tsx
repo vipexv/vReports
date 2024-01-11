@@ -82,13 +82,13 @@ const App: React.FC = () => {
       <div className="flex w-[100dvw] h-[100dvh] justify-center items-center">
         <div className="min-w-[45dvw] min-h-[35dvw] bg-primary rounded-[2px]">
           <div className="flex items-center">
-            <h1 className="m-2 relative flex justify-center items-center rounded p-1 font-main text-white text-xl border-[2px]">
+            <h1 className="m-2 relative flex justify-center bg-secondary items-center rounded px-4 py-1 font-main text-white text-lg border-[2px]">
               <ShieldAlert size={18} className="mr-1 text-blue-400" />
               Report Menu
             </h1>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="border-[2px] rounded hover:bg-secondary text-white ml-auto mr-1">
+                <Button className="border-[2px] rounded bg-secondary hover:bg-primary text-white ml-auto mr-1">
                   <User size={14} />
                 </Button>
               </DropdownMenuTrigger>
@@ -177,12 +177,13 @@ const App: React.FC = () => {
 
           <Divider size="xs" />
 
-          <div className="flex justify-center items-center mt-1">
+          <div className="flex justify-center items-center mt-2">
             <SegmentedControl
               className="border-[2px] bg-secondary"
+              defaultValue="reports"
               data={[
                 {
-                  value: "preview",
+                  value: "reports",
                   label: (
                     <>
                       <div className="flex justify-center items-center gap-1 text-white">
@@ -197,7 +198,7 @@ const App: React.FC = () => {
                   ),
                 },
                 {
-                  value: "code",
+                  value: "leaderboard",
                   label: (
                     <>
                       <div className="flex justify-center items-center gap-1 text-white">
@@ -207,14 +208,10 @@ const App: React.FC = () => {
                     </>
                   ),
                 },
-                {
-                  value: "export",
-                  label: <div> export</div>,
-                },
               ]}
             />
           </div>
-          {/* <Separator /> */}
+          <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5"></div>
         </div>
       </div>
     </>
