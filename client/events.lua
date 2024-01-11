@@ -5,3 +5,9 @@ RegisterNetEvent("UIMessage", function(action, data)
         "\n Invoking Resource: ",
         GetInvokingResource())
 end)
+
+RegisterNetEvent("staffchat:state:playerdata", function(data)
+    PlayerData = data
+
+    Debug("[event:staffchat:state:playerdata] data param: ", json.encode(data))
+end)

@@ -44,7 +44,7 @@ function CPlayer:new(player)
         avatar = Config.UseDiscordRestAPI and GetDiscordAvatar(discordId, player) or nil
     }
 
-    Player(player).state.playerData = obj
+    TriggerClientEvent("staffchat:state:playerdata", player, obj)
 
     setmetatable(obj, self)
     self.__index = self
