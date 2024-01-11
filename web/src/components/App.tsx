@@ -1,12 +1,11 @@
-import { Divider } from "@mantine/core";
-import { Cog, ShieldAlert } from "lucide-react";
+import { Divider, SegmentedControl } from "@mantine/core";
+import { Flag, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
-import { isEnvBrowser } from "../utils/misc";
-import "./App.css";
-import { Button } from "./ui/button";
+import { MdLeaderboard } from "react-icons/md";
+
 import {
   Cloud,
   CreditCard,
@@ -23,6 +22,9 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
+import { isEnvBrowser } from "../utils/misc";
+import "./App.css";
+import { Button } from "./ui/button";
 
 import {
   DropdownMenu,
@@ -84,18 +86,14 @@ const App: React.FC = () => {
               <ShieldAlert size={18} className="mr-1 text-blue-400" />
               Report Menu
             </h1>
-            <Button className="ml-auto relative rounded flex justify-center items-center mr-1 border-[2px] bg-opacity-50 font-main text-white text-xl hover:bg-secondary">
-              <Cog size={14} />
-            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="border-[2px] rounded hover:bg-secondary">
-                  {" "}
-                  <User className="h-4 w-4" />
+                <Button className="border-[2px] rounded hover:bg-secondary text-white ml-auto mr-1">
+                  <User size={14} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuContent className="w-56 bg-primary border-[2px]">
+                <DropdownMenuLabel>Profile</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
@@ -131,7 +129,7 @@ const App: React.FC = () => {
                       <span>Invite users</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
+                      <DropdownMenuSubContent className="bg-primary border-[2px]">
                         <DropdownMenuItem>
                           <Mail className="mr-2 h-4 w-4" />
                           <span>Email</span>
@@ -176,8 +174,47 @@ const App: React.FC = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          {/* <Separator /> */}
+
           <Divider size="xs" />
+
+          <div className="flex justify-center items-center mt-1">
+            <SegmentedControl
+              className="border-[2px] bg-secondary"
+              data={[
+                {
+                  value: "preview",
+                  label: (
+                    <>
+                      <div className="flex justify-center items-center gap-1 text-white">
+                        <Flag
+                          size={14}
+                          className="text-red-500"
+                          strokeWidth={3}
+                        />
+                        Reports
+                      </div>
+                    </>
+                  ),
+                },
+                {
+                  value: "code",
+                  label: (
+                    <>
+                      <div className="flex justify-center items-center gap-1 text-white">
+                        <MdLeaderboard size={14} className="text-yellow-500" />
+                        Leaderboard
+                      </div>
+                    </>
+                  ),
+                },
+                {
+                  value: "export",
+                  label: <div> export</div>,
+                },
+              ]}
+            />
+          </div>
+          {/* <Separator /> */}
         </div>
       </div>
     </>
