@@ -1,5 +1,5 @@
 import { Divider, SegmentedControl } from "@mantine/core";
-import { Flag, ShieldAlert } from "lucide-react";
+import { Flag, RefreshCw, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { MdLeaderboard } from "react-icons/md";
 import { useNuiEvent } from "../hooks/useNuiEvent";
@@ -41,6 +41,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Reports from "./reports";
+import { toast } from "sonner";
 
 debugData([
   {
@@ -60,6 +61,7 @@ const views: views = {
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [currentTab, setCurrentTab] = useState("reports");
+  const [userRateLimited, setUserRateLimited] = useState(false);
 
   const CurrentView = views[currentTab];
 
@@ -89,9 +91,22 @@ const App: React.FC = () => {
               <ShieldAlert size={18} className="mr-1 text-blue-400" />
               Report Menu
             </h1>
+            <Button
+              className="border-[2px] ml-auto rounded bg-secondary text-white mr-1"
+              disabled={userRateLimited}
+              onClick={() => {
+                fetchNui("staffchat:nuicb:refresh");
+                setUserRateLimited(true);
+                setTimeout(() => {
+                  setUserRateLimited(false);
+                }, 2500);
+              }}
+            >
+              <RefreshCw size={16} strokeWidth={2.25} />
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="border-[2px] rounded bg-secondary hover:bg-primary text-white ml-auto mr-1">
+                <Button className="border-[2px] rounded bg-secondary hover:bg-primary text-white mr-1">
                   <User size={14} />
                 </Button>
               </DropdownMenuTrigger>

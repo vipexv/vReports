@@ -12,17 +12,13 @@ const types = ["Bug", "Question", "Gameplay"];
 
 const getCurrentDateTime = () => {
   const currentDate = new Date();
-
-  // Get hours and minutes
   const hours = currentDate.getHours();
   const minutes = currentDate.getMinutes();
 
-  // Format date as MM/DD/YYYY
   const formattedDate = `${
     currentDate.getMonth() + 1
   }/${currentDate.getDate()}/${currentDate.getFullYear()}`;
 
-  // Format time as HH:mm
   const formattedTime = `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
 
   return { formattedTime, formattedDate };
@@ -106,7 +102,7 @@ const Reports: React.FC = () => {
         // title={`[${currReport.id}] ${currReport.title}`}
       >
         <div className="flex flex-col gap-1 justify-center border-[2px] p-2 rounded">
-          <div className="flex m-2">
+          <div className="flex m-2 font-main">
             <p>
               [{currReport.id}] {currReport.title}
             </p>
@@ -114,8 +110,10 @@ const Reports: React.FC = () => {
               {currReport.type}
             </p>
           </div>
-          <div className="rounded py-1 px-2">
-            Report Description: {currReport.description}
+          <div className="rounded py-1 px-2 flex flex-col justify-center">
+            <p className="text-white font-main">Report Description</p>
+
+            {currReport.description}
           </div>
         </div>
         <div className="flex justify-end items-center mt-4 gap-2">
