@@ -4,13 +4,8 @@ RegisterCommand(Config.ReportCommand, function()
 end, false)
 
 RegisterCommand(Config.ReportMenuCommand, function()
-    if not PlayerData or not PlayerData.isStaff then
-        return Debug("[command:show-nui] PlayerData is either null or player isn't staff, PlayerData: ",
-            json.encode(PlayerData))
-    end
-
-    -- TriggerServerEvent("reportmenu:server:cb:reports")
-
+    UIMessage("nui:state:playerdata", PlayerData)
+    UIMessage("nui:state:myreports", MyReports)
     ToggleNuiFrame(true)
     Debug("[command:show-nui] ToggleNuiFrame called and set to true.")
 end, false)

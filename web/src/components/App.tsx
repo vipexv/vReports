@@ -33,14 +33,32 @@ const initialReportData = {
   description: "",
 };
 
+interface playerData {
+  name: string;
+  id: string | number;
+  identifiers: string[];
+  isStaff: boolean;
+}
+
+const initialPlayerData: playerData = {
+  name: "vipex",
+  id: "1",
+  identifiers: ["hey", "hey2"],
+  isStaff: false,
+};
+
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
-  const [currentTab, setCurrentTab] = useState("reports");
+  const [playerData, setPlayerData] = useState<playerData>(initialPlayerData);
+  const [currentTab, setCurrentTab] = useState(
+    playerData.isStaff ? "reports" : "myreports"
+  );
   const [reportMenuVisible, setReportMenuVisible] = useState(false);
   const [reportData, setReportData] = useState(initialReportData);
   const [activeReports, setActiveReports] = useState<Report[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
+  const [myReports, setMyReports] = useState<Report[]>([]);
 
   // Spaghetti code and it's horrible, i'm doing this at 6 am after being at it since 11 PM, i should stop but i'm rushing it to improve later.
   useEffect(() => {
@@ -61,9 +79,18 @@ const App: React.FC = () => {
         : [];
     };
 
-    setFilteredReports(filterPlayers(activeReports, searchQuery));
+    setFilteredReports(
+      filterPlayers(
+        currentTab === "reports" ? activeReports : myReports,
+        searchQuery
+      )
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
+
+  useNuiEvent("nui:state:playerdata", setPlayerData);
+
+  useNuiEvent("nui:state:myreports", setMyReports);
 
   useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
@@ -145,6 +172,7 @@ const App: React.FC = () => {
                     data={[
                       {
                         value: "reports",
+                        disabled: !playerData.isStaff,
                         label: (
                           <>
                             <div className="flex justify-center items-center gap-1 text-white">
@@ -204,11 +232,14 @@ const App: React.FC = () => {
                     <>
                       {!searchQuery ? (
                         <>
-                          <Reports reports={activeReports} />
+                          <Reports reports={activeReports} myReports={false} />
                         </>
                       ) : (
                         <>
-                          <Reports reports={filteredReports} />
+                          <Reports
+                            reports={filteredReports}
+                            myReports={false}
+                          />
                         </>
                       )}
                     </>
@@ -218,7 +249,15 @@ const App: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <div>my reports</div>
+                      {!searchQuery ? (
+                        <>
+                          <Reports reports={myReports} myReports={true} />
+                        </>
+                      ) : (
+                        <>
+                          <Reports reports={filteredReports} myReports={true} />
+                        </>
+                      )}
                     </>
                   )}
                 </div>

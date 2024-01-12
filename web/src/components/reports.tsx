@@ -56,9 +56,10 @@ const initStateCurrReport: Report = {
 
 interface Props {
   reports: Report[];
+  myReports: boolean;
 }
 
-const Reports: React.FC<Props> = ({ reports }) => {
+const Reports: React.FC<Props> = ({ reports, myReports }) => {
   const [currReport, setCurrReport] = useState(initStateCurrReport);
   const [modalActive, setModalActive] = useState(false);
 
@@ -145,36 +146,45 @@ const Reports: React.FC<Props> = ({ reports }) => {
           </div>
         </div>
         <div className="flex justify-end items-center mt-4 gap-2">
-          <Button
-            className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
-            onClick={() => {
-              fetchNui("reportmenu:nuicb:goto", currReport);
-              setCurrReport(initStateCurrReport);
-              setModalActive(false);
-            }}
-          >
-            <GiTeleport className="mr-1" /> Goto
-          </Button>
-          <Button
-            className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
-            onClick={() => {
-              fetchNui("reportmenu:nuicb:bring", currReport);
-              setCurrReport(initStateCurrReport);
-              setModalActive(false);
-            }}
-          >
-            <FaPeoplePulling className="mr-1" /> Bring
-          </Button>
+          {!myReports && (
+            <>
+              <Button
+                className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
+                onClick={() => {
+                  fetchNui("reportmenu:nuicb:goto", currReport);
+                  setCurrReport(initStateCurrReport);
+                  setModalActive(false);
+                }}
+              >
+                <GiTeleport className="mr-1" /> Goto
+              </Button>
+              <Button
+                className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
+                onClick={() => {
+                  fetchNui("reportmenu:nuicb:bring", currReport);
+                  setCurrReport(initStateCurrReport);
+                  setModalActive(false);
+                }}
+              >
+                <FaPeoplePulling className="mr-1" /> Bring
+              </Button>
+            </>
+          )}
           <Button
             className="text-xs rounded-[2px] m-0 border-[2px] bg-destructive"
             onClick={() => {
-              fetchNui("reportmenu:nuicb:delete", currReport);
-              setCurrReport(initStateCurrReport);
+              const data = {
+                ...currReport,
+                isMyReportsPage: myReports,
+              };
+
+              fetchNui("reportmenu:nuicb:delete", data);
               setModalActive(false);
+              setCurrReport(initStateCurrReport);
             }}
           >
             <AlertTriangle size={16} strokeWidth={2.5} className="mr-1" />
-            Conclude Report
+            {myReports ? "Close" : "Conclude"} Report
           </Button>
         </div>
       </Modal>

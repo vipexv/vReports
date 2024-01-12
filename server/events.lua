@@ -7,6 +7,7 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     data.randomKey = randomKey
     ActiveReports[randomKey] = data
 
+    TriggerClientEvent("reportmenu:client:addactivereport", source, data)
 
     for k, v in pairs(OnlineStaff) do
         TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)
@@ -34,22 +35,36 @@ RegisterNetEvent("reportmenu:server:cb:reports", function()
 end)
 
 RegisterNetEvent("reportmenu:server:delete", function(data)
-    if not OnlineStaff[tonumber(source)] then
+    if not OnlineStaff[tonumber(source)] and not data.isMyReportsPage then
         return Debug(
             ("[netEvent:reportmenu:server:delete] %s (ID -%s) Isn't a staff member but somehow called the event.")
             :format(GetPlayerName(source), source))
     end
 
-    if ActiveReports[data.randomKey] then
+    local thisReport = ActiveReports[data.randomKey]
+
+    if data.isMyReportsPage and thisReport then
+        if tonumber(thisReport.id) ~= tonumber(source) then
+            return Debug(
+                "(reportmenu:server:delete) Player attempted to delete a report but it wasn't them who sent it.")
+        end
+    end
+
+    if thisReport then
         ShowNotification(
             {
                 title = "Report Menu",
-                description = ("Your report has been closed by %s (ID - %s)"):format(GetPlayerName(source), source),
+                description = data.isMyReportsPage and "You have closed this report." or
+                    ("Your report has been closed by %s (ID - %s)"):format(GetPlayerName(source), source),
                 target = data.id,
             }
         )
+
         ActiveReports[data.randomKey] = nil
+
         Debug("ActiveReport with the ID: ", data.randomKey, "was found and was deleted.")
+
+        TriggerClientEvent("staffchat:client:removemyreport", data.id, data)
 
         for k, v in pairs(OnlineStaff) do
             TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)

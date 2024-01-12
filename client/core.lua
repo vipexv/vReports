@@ -1,1 +1,2 @@
 PlayerData = {}
+MyReports = {}
