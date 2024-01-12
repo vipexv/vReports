@@ -11,6 +11,6 @@ Preview: [Youtube](https://youtu.be/tS6bMQRCiS8) [v1.0.0]
 
 If you would like to contribute, please go ahead and head over to the GitHub page and feel free to send a pull request.
 
-[details="Config"]
+* Config
+  
 ![image](https://github.com/vipexv/vReports/assets/101529155/416919f0-344f-4c1f-8552-6eb5de44c446)
-[/details]
