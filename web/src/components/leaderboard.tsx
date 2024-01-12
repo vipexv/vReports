@@ -35,26 +35,33 @@ const Leaderboard: React.FC<Props> = ({ leaderboardData }) => {
               <i className="fa-solid fa-signature" /> Player Name
             </th>
             <th className="text-center px-4 py-4">
-              <i className="fa-brands fa-discord"></i> Reports Completed
+              <i className="fa-brands fa-discord"></i> Reports Concluded
             </th>
           </tr>
         </thead>
         <tbody>
-          {data[activePage - 1].map((player, index) => {
-            console.log(player.name);
-            return (
-              <tr
-                key={index}
-                className="bg-secondary border-[2px] rounded text-center font-main"
-              >
-                {/* <td>{player.name}</td> */}
-                <td className="px-4 py-2 rounded max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
-                  {player.name}
-                </td>
-                <td className="px-4 py-2 rounded">{player.concludedReports}</td>
-              </tr>
-            );
-          })}
+          {data.length > 0 ? (
+            <>
+              {data[activePage - 1].map((player, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className="bg-secondary border-[2px] rounded text-center font-main m-2 mt-1"
+                  >
+                    {/* <td>{player.name}</td> */}
+                    <td className="px-4 py-2 rounded max-w-[150px] overflow-hidden overflow-ellipsis whitespace-nowrap">
+                      {player.name}
+                    </td>
+                    <td className="px-4 py-2 rounded">
+                      {player.concludedReports}
+                    </td>
+                  </tr>
+                );
+              })}
+            </>
+          ) : (
+            <></>
+          )}
         </tbody>
       </table>
     </>
@@ -66,7 +73,10 @@ const Leaderboard: React.FC<Props> = ({ leaderboardData }) => {
         <div className="flex flex-col w-full h-full">{leaderboard}</div>
 
         <Pagination
-          className="border-[2px] rounded p-1 font-main flex justify-center items-center"
+          className="rounded font-main flex justify-center items-center"
+          classNames={{
+            control: "bg-secondary border border-[2px]",
+          }}
           total={data.length}
           value={activePage}
           onChange={setActivePage}

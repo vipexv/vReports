@@ -5,8 +5,10 @@ import {
   Select,
   Transition,
 } from "@mantine/core";
-import { AlertTriangle, Cog, Flag, ShieldAlert } from "lucide-react";
+import { AlertTriangle, Cog, Flag, ShieldAlert, Terminal } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { MdLeaderboard } from "react-icons/md";
+import { TbFileReport } from "react-icons/tb";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
@@ -14,12 +16,10 @@ import { isEnvBrowser } from "../utils/misc";
 import "./App.css";
 import { Report } from "./reports";
 import { Button } from "./ui/button";
-import { MdLeaderboard } from "react-icons/md";
-import { TbFileReport } from "react-icons/tb";
-
-import Reports from "./reports";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import Leaderboard from "./leaderboard";
+import Reports from "./reports";
 
 debugData([
   {
@@ -66,6 +66,9 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [myReports, setMyReports] = useState<Report[]>([]);
+  const [filteredLeaderboardData, setFilteredLeaderboardData] = useState<
+    LeaderboardData[]
+  >([]);
 
   const [globalLeaderboardData, setLeaderboardData] = useState<
     LeaderboardData[]
@@ -104,6 +107,23 @@ const App: React.FC = () => {
           })
         : [];
     };
+
+    const filterLeaderboardData = (data: LeaderboardData[], query: string) => {
+      return data
+        ? Object.values(data).filter((player) => {
+            if (!player) return;
+
+            return player.name.toLowerCase().includes(query);
+          })
+        : [];
+    };
+
+    if (currentTab === "leaderboard") {
+      setFilteredLeaderboardData(
+        filterLeaderboardData(globalLeaderboardData, searchQuery)
+      );
+      return;
+    }
 
     setFilteredReports(
       filterPlayers(
@@ -177,12 +197,32 @@ const App: React.FC = () => {
                 style={styles}
               >
                 <div className="flex items-center">
-                  <h1 className="m-2 relative flex justify-center bg-secondary items-center rounded px-4 py-1 font-main text-white text-lg border-[2px]">
+                  <h1 className="m-2 relative flex justify-center bg-secondary items-center rounded px-4 py-1 font-main text-white border-[2px]">
                     <ShieldAlert size={18} className="mr-1 text-blue-400" />
                     Report Menu
                   </h1>
+                  <Transition
+                    mounted={currentTab === "leaderboard"}
+                    transition={"scale-y"}
+                    duration={400}
+                    timingFunction="ease"
+                  >
+                    {(styles) => (
+                      <>
+                        <Alert
+                          className={`bg-secondary font-main w-[30dvw] m-auto rounded-[2px] border-[2px] h-[4dvh]`}
+                          style={styles}
+                        >
+                          <Terminal size={18} className="-mt-[6px]" />
+                          <AlertTitle className="-mt-1 truncate">
+                            The leaderboard updates data once you leave.
+                          </AlertTitle>
+                        </Alert>
+                      </>
+                    )}
+                  </Transition>
                   <Button className="border-[2px] ml-auto rounded bg-secondary text-white mr-1">
-                    <Cog size={16} strokeWidth={2.25} />
+                    <Cog size={13} strokeWidth={2.25} />
                   </Button>
                 </div>
 
@@ -272,7 +312,13 @@ const App: React.FC = () => {
                     </>
                   ) : currentTab === "leaderboard" ? (
                     <>
-                      <Leaderboard leaderboardData={globalLeaderboardData} />
+                      {!searchQuery ? (
+                        <Leaderboard leaderboardData={globalLeaderboardData} />
+                      ) : (
+                        <Leaderboard
+                          leaderboardData={filteredLeaderboardData}
+                        />
+                      )}
                     </>
                   ) : (
                     <>
