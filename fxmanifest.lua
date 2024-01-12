@@ -2,7 +2,8 @@ fx_version "cerulean"
 lua54 'yes'
 game 'gta5'
 
-author 'vipex'
+author 'vipex [Discord: vipex.v]'
+description 'Advanced Free and Standalone Report Menu for FiveM'
 ui_page 'web/dist/index.html'
 
 shared_scripts {

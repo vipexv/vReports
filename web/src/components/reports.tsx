@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { FaPeoplePulling } from "react-icons/fa6";
 import { GiTeleport } from "react-icons/gi";
 
+import { debugData } from "@/utils/debugData";
 import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
 import "./App.css";
 import { Button } from "./ui/button";
-import { debugData } from "@/utils/debugData";
 
 const types = ["Bug", "Question", "Gameplay"];
 

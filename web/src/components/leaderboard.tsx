@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import "./App.css";
-import { LeaderboardData } from "./App";
 import { Pagination } from "@mantine/core";
+import React, { useState } from "react";
+import { LeaderboardData } from "./App";
+import "./App.css";
 
 interface Props {
   leaderboardData: LeaderboardData[];
