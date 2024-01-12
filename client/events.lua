@@ -17,3 +17,9 @@ RegisterNetEvent("reportmenu:client:cb:reports", function(activeReports)
 
     UIMessage("nui:state:reports", activeReports)
 end)
+
+RegisterNetEvent("reportmenu:nuicb:refresh", function(data, cb)
+    Debug("[reportmenu:nuicb:refresh] Called.")
+    TriggerServerEvent("reportmenu:server:cb:reports")
+    cb({})
+end)

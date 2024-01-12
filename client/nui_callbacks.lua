@@ -22,8 +22,26 @@ RegisterNuiCallback("reportmenu:nuicb:sendreport", function(data, cb)
     cb({})
 end)
 
-RegisterNetEvent("reportmenu:nuicb:refresh", function(data, cb)
-    Debug("[reportmenu:nuicb:refresh] Called.")
-    TriggerServerEvent("reportmenu:server:cb:reports")
+RegisterNuiCallback("reportmenu:nuicb:delete", function(data, cb)
+    if not data then return Debug("[reportmenu:nuicb:delete] first param is null.") end
+
+    TriggerServerEvent("reportmenu:server:delete", data)
+
+    cb({})
+end)
+
+RegisterNuiCallback("reportmenu:nuicb:goto", function(data, cb)
+    if not data then return Debug("[reportmenu:nuicb:goto] first param is null.") end
+
+    TriggerServerEvent("reportmenu:server:goto", data)
+
+    cb({})
+end)
+
+RegisterNuiCallback("reportmenu:nuicb:bring", function(data, cb)
+    if not data then return Debug("[reportmenu:nuicb:goto] first param is null.") end
+
+    TriggerServerEvent("reportmenu:server:bring", data)
+
     cb({})
 end)

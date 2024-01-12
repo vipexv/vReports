@@ -171,6 +171,10 @@ const Reports: React.FC = () => {
               fetchNui("reportmenu:nuicb:delete", currReport);
               setCurrReport(initStateCurrReport);
               setModalActive(false);
+              // Wait 500 MS for the task to finish then refresh.
+              setTimeout(() => {
+                fetchNui("reportmenu:nuicb:refresh", {});
+              }, 500);
             }}
           >
             <AlertTriangle size={16} strokeWidth={2.5} className="mr-1" />
