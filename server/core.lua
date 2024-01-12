@@ -37,8 +37,6 @@ local function loopThroughIdentifiers(identifiers, sourceIdentifiers)
 end
 
 AddEventHandler("playerDropped", function(reason)
-    local source = source
-
     if source <= 0 then
         return Debug("(Error) [eventHandler:playerDropped] Source is nil.")
     end
@@ -75,7 +73,7 @@ AddEventHandler("playerDropped", function(reason)
                 concludedReports = staff.concludedReportsThisSession
             })
             SaveLeaderboard(leaderboard)
-            Debug("[playerDropped] leaderboard was null, so we just instantly stored the first data.")
+            Debug("[playerDropped] leaderboard was null, so we just instantly stored the first data ever :o.")
         end
 
         OnlineStaff[source] = nil

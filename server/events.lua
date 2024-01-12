@@ -24,6 +24,18 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     Debug("[netEvent:reportmenu:server:report] Active Reports table: ", json.encode(ActiveReports))
 end)
 
+RegisterNetEvent("reportmenu:server:cb:leaderboard", function()
+    if not OnlineStaff[tonumber(source)] then
+        return Debug(
+            ("[reportmenu:server:cb:leaderboard] %s (ID -%s) Isn't a staff member but somehow called the event.")
+            :format(GetPlayerName(source), source))
+    end
+
+    local leaderboard = LoadLeaderboard()
+
+    TriggerClientEvent("reportmenu:client:cb:reports", source, leaderboard)
+end)
+
 RegisterNetEvent("reportmenu:server:cb:reports", function()
     if not OnlineStaff[tonumber(source)] then
         return Debug(

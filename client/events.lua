@@ -18,6 +18,9 @@ RegisterNetEvent("reportmenu:client:cb:reports", function(activeReports)
     UIMessage("nui:state:reports", activeReports)
 end)
 
+RegisterNetEvent("reportmenu:client:cb:reports", function(leaderboard)
+    UIMessage("nui:state:leaderboard", leaderboard)
+end)
 
 RegisterNetEvent("reportmenu:client:update", function(activeReports)
     if not activeReports then return Debug("[reportmenu:client:cb:update] First param is null.") end

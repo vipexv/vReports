@@ -111,7 +111,11 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
             </>
           ) : (
             <>
-              <div className="font-main">No Reports available.</div>
+              <div className="font-main">
+                {myReports
+                  ? "You have no active reports."
+                  : "No Reports available."}
+              </div>
             </>
           )}
         </div>

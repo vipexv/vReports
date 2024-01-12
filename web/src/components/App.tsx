@@ -19,6 +19,7 @@ import { TbFileReport } from "react-icons/tb";
 
 import Reports from "./reports";
 import { toast } from "sonner";
+import Leaderboard from "./leaderboard";
 
 debugData([
   {
@@ -44,8 +45,14 @@ const initialPlayerData: playerData = {
   name: "vipex",
   id: "1",
   identifiers: ["hey", "hey2"],
-  isStaff: false,
+  isStaff: true,
 };
+
+export interface LeaderboardData {
+  concludedReports: number;
+  name: string;
+  identifiers: string[];
+}
 
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -59,6 +66,25 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [myReports, setMyReports] = useState<Report[]>([]);
+
+  const [globalLeaderboardData, setLeaderboardData] = useState<
+    LeaderboardData[]
+  >([
+    {
+      concludedReports: 1,
+      name: "vipex",
+      identifiers: [
+        "license:6c5a04a27880f9ef14f177cd52b495d6d9517187",
+        "xbl:2535413463113628",
+        "live:844425900550524",
+        "discord:470311257589809152",
+        "fivem:1124792",
+        "license2:6c5a04a27880f9ef14f177cd52b495d6d9517187",
+      ],
+    },
+  ]);
+
+  useNuiEvent("nui:state:leaderboard", setLeaderboardData);
 
   // Spaghetti code and it's horrible, i'm doing this at 6 am after being at it since 11 PM, i should stop but i'm rushing it to improve later.
   useEffect(() => {
@@ -202,6 +228,7 @@ const App: React.FC = () => {
                       },
                       {
                         value: "leaderboard",
+                        disabled: !playerData.isStaff,
                         label: (
                           <>
                             <div className="flex justify-center items-center gap-1 text-white">
@@ -245,7 +272,7 @@ const App: React.FC = () => {
                     </>
                   ) : currentTab === "leaderboard" ? (
                     <>
-                      <div>leaderboard</div>
+                      <Leaderboard leaderboardData={globalLeaderboardData} />
                     </>
                   ) : (
                     <>
