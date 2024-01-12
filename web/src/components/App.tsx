@@ -19,6 +19,14 @@ import "./App.css";
 import Leaderboard from "./leaderboard";
 import Reports, { Report } from "./reports";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 debugData([
   {
@@ -53,6 +61,16 @@ export interface LeaderboardData {
   identifiers: string[];
 }
 
+export interface UserSettings {
+  notifications: boolean;
+}
+
+interface notifyData {
+  title: string;
+  description: string;
+  appearOnlyWhenNuiNotOpen?: boolean;
+}
+
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [playerData, setPlayerData] = useState<playerData>(initialPlayerData);
@@ -68,6 +86,10 @@ const App: React.FC = () => {
   const [filteredLeaderboardData, setFilteredLeaderboardData] = useState<
     LeaderboardData[]
   >([]);
+
+  const [userSettings, setUserSettings] = useState<UserSettings>({
+    notifications: true,
+  });
 
   const [globalLeaderboardData, setLeaderboardData] = useState<
     LeaderboardData[]
@@ -133,21 +155,21 @@ const App: React.FC = () => {
 
   useNuiEvent("nui:state:leaderboard", setLeaderboardData);
 
+  useNuiEvent("nui:state:settings", setUserSettings);
+
   useNuiEvent("nui:resetstates", () => {
     // Only search query for now.
     setSearchQuery("");
   });
 
-  interface notifyData {
-    title: string;
-    description: string;
-    appearOnlyWhenNuiNotOpen?: boolean;
-  }
-
   useNuiEvent<boolean>("setVisible", setVisible);
 
   useNuiEvent<notifyData>("nui:notify", (data) => {
-    if (data.appearOnlyWhenNuiNotOpen && visible) return;
+    if (
+      !userSettings.notifications ||
+      (data.appearOnlyWhenNuiNotOpen && visible)
+    )
+      return;
     toast.success(data.title, {
       description: data.description,
       classNames: {
@@ -212,9 +234,32 @@ const App: React.FC = () => {
                       </>
                     )}
                   </Transition>
-                  <Button className="border-[2px] ml-auto rounded bg-secondary text-white mr-1">
-                    <Cog size={13} strokeWidth={2.25} />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button className="border-[2px] ml-auto rounded bg-secondary text-white mr-1">
+                        <Cog size={13} strokeWidth={2.25} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-primary font-main">
+                      <DropdownMenuLabel className="text-center">
+                        Settings
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuCheckboxItem
+                        checked={userSettings.notifications}
+                        onCheckedChange={(checked) => {
+                          setUserSettings({ notifications: checked });
+                          const settings = {
+                            notifications: checked,
+                          };
+                          setUserSettings(settings);
+                          fetchNui("reportmenu:nui:cb:settings", settings);
+                        }}
+                      >
+                        Notifications
+                      </DropdownMenuCheckboxItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
 
                 <Divider size="xs" />

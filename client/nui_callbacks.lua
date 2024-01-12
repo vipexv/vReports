@@ -37,6 +37,18 @@ RegisterNuiCallback("reportmenu:nuicb:delete", function(data, cb)
     cb({})
 end)
 
+RegisterNuiCallback("reportmenu:nui:cb:settings", function(data, cb)
+    if not data then return Debug("[reportmenu:nui:cb:settings] first param is null.") end
+
+    local settings = json.encode(data)
+
+    SetResourceKvp("reportmenu:settings", settings)
+    Debug("Settings loaded: ", data)
+
+    Debug("[reportmenu:nui:cb:settings] Settings updated: ", settings)
+    cb({})
+end)
+
 RegisterNuiCallback("reportmenu:nuicb:goto", function(data, cb)
     if not data then return Debug("[reportmenu:nuicb:goto] first param is null.") end
 

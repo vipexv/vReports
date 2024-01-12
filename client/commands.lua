@@ -4,6 +4,14 @@ RegisterCommand(Config.ReportCommand, function()
 end, false)
 
 RegisterCommand(Config.ReportMenuCommand, function()
+    if not Script.state.settingsLoaded then
+        Debug("Loading settings.")
+        local settingsKvp = GetResourceKvpString("reportmenu:settings")
+        if not settingsKvp then return Debug("No settings detected.") end
+        local settings = json.decode(settingsKvp)
+        UIMessage("nui:state:settings", settings)
+        Debug("Settings loaded: ", settingsKvp)
+    end
     UIMessage("nui:state:playerdata", PlayerData)
     UIMessage("nui:state:myreports", MyReports)
 
