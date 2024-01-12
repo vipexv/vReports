@@ -144,9 +144,9 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
             </p>
           </div>
           <div className="rounded py-1 px-2 flex flex-col gap-2 justify-center">
-            <p className="font-main">Player Name</p>
+            <p className="text-white font-main">Player Name</p>
             {currReport.playerName}
-            <p className="font-main">Report Description</p>
+            <p className="text-white font-main">Report Description</p>
             {currReport.description}
           </div>
         </div>
