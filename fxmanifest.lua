@@ -24,7 +24,6 @@ server_scripts {
 	"sv_config.lua",
 	"server/modules/**/*",
 	"server/classes/**/*",
-	"server/versionChecker.lua",
 	"server/sv_utils.lua",
 	"server/Classes/**/*",
 	"server/core.lua",

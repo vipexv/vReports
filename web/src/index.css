@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: only light !important;
+}
+
+body {
+  background-color: transparent !important;
+  overflow: hidden;
+}
+
 @layer base {
   :root {
     --background: 240 10% 3.9%;

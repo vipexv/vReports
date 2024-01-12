@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { FaPeoplePulling } from "react-icons/fa6";
 import { GiTeleport } from "react-icons/gi";
 
+import { useNuiEvent } from "@/hooks/useNuiEvent";
+import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
 import "./App.css";
 import { Button } from "./ui/button";
-import { fetchNui } from "@/utils/fetchNui";
+import { debugData } from "@/utils/debugData";
 
 const types = ["Bug", "Question", "Gameplay"];
 
@@ -25,7 +27,7 @@ const getCurrentDateTime = () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const activeReports = Array.from({ length: 100 }, (_, index) => ({
+const testReports = Array.from({ length: 100 }, (_, index) => ({
   id: index,
   type: types[Math.floor(Math.random() * types.length)],
   description: "Very Very racist personeeeeeeeeeeeeeeeee!",
@@ -36,7 +38,15 @@ const activeReports = Array.from({ length: 100 }, (_, index) => ({
   },
 }));
 
-const initStateCurrReport = {
+export interface Report {
+  id: number | string;
+  type: "Bug" | "Question" | "Gameplay" | "";
+  description: string;
+  datetime: unknown;
+  title: "";
+}
+
+const initStateCurrReport: Report = {
   id: 0,
   type: "",
   description: "",
@@ -45,63 +55,82 @@ const initStateCurrReport = {
     formattedTime: "",
   },
   title: "",
-  state: {
-    concluded: false,
-  },
 };
 
 const Reports: React.FC = () => {
   const [currReport, setCurrReport] = useState(initStateCurrReport);
   const [modalActive, setModalActive] = useState(false);
+  const [activeReports, setActiveReports] = useState<Report[]>([]);
+
+  useNuiEvent("nui:state:reports", setActiveReports);
+
+  debugData([
+    {
+      action: "nui:state:reports",
+      data: testReports,
+    },
+  ]);
 
   return (
     <>
       <ScrollArea className="w-full h-full">
         <div className="grid grid-cols-1 m-5 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {Object.values(activeReports).map((report, index) => {
-            return (
-              <>
-                <div
-                  key={index}
-                  onClick={() => {
-                    setCurrReport(report);
-                    setModalActive(true);
-                  }}
-                  className="flex hover:cursor-pointer transition-all select-none hover:-translate-y-1 flex-col py-1 px-2  bg-secondary border-[2px] rounded text-white"
-                >
-                  <p className="flex items-center">
-                    <span className="truncate max-w-[100px]">
-                      [{report.id}] {report.title}
-                    </span>
-                    <span className="ml-auto bg-primary px-1 font-main text-sm">
-                      {report.type}
-                    </span>
-                  </p>
-                  <div className="flex mt-2">
-                    <p className="text-xs text-white text-opacity-50 truncate max-w-[100px]">
-                      {report.description}
-                    </p>
-                    <p className="ml-auto bg-primary px-2 ml-4 font-main text-xs opacity-50">
-                      {report.datetime.formattedTime} |{" "}
-                      {report.datetime.formattedDate}
-                    </p>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+          {activeReports.length > 0 ? (
+            <>
+              {Object.values(activeReports).map((report, index) => {
+                return (
+                  <>
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setCurrReport(report);
+                        setModalActive(true);
+                      }}
+                      className="flex hover:cursor-pointer transition-all select-none hover:-translate-y-1 flex-col py-1 px-2  bg-secondary border-[2px] rounded text-white"
+                    >
+                      <p className="flex items-center">
+                        <span className="truncate max-w-[100px]">
+                          [{report.id}] {report.title}
+                        </span>
+                        <span className="ml-auto bg-primary px-1 font-main text-sm">
+                          {report.type}
+                        </span>
+                      </p>
+                      <div className="flex mt-2">
+                        <p className="text-xs text-white text-opacity-50 truncate max-w-[100px]">
+                          {report.description}
+                        </p>
+                        <p className="ml-auto bg-primary px-2 ml-4 font-main text-xs opacity-50">
+                          {report.datetime.formattedTime}
+                          {report.datetime.formattedDate}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              <div className="font-main">No Reports available.</div>
+            </>
+          )}
         </div>
       </ScrollArea>
       <Modal
         opened={modalActive}
+        centered
         onClose={() => {
           setModalActive(false);
           setCurrReport(initStateCurrReport);
         }}
+        classNames={{
+          body: "border-[2px] bg-secondary",
+        }}
         withCloseButton={false}
         // title={`[${currReport.id}] ${currReport.title}`}
       >
-        <div className="flex flex-col gap-1 justify-center border-[2px] p-2 rounded">
+        <div className="flex flex-col gap-1 justify-center p-2 rounded">
           <div className="flex m-2 font-main">
             <p>
               [{currReport.id}] {currReport.title}
@@ -145,8 +174,8 @@ const Reports: React.FC = () => {
               setModalActive(false);
             }}
           >
-            <AlertTriangle size={16} strokeWidth={2.5} className="mr-1" /> Close
-            Report
+            <AlertTriangle size={16} strokeWidth={2.5} className="mr-1" />
+            Conclude Report
           </Button>
         </div>
       </Modal>
