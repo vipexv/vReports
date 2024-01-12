@@ -1,4 +1,3 @@
-![report-menu-gfx](https://github.com/vipexv/vReports/assets/101529155/c9df066b-6160-477e-b226-11e2a7d8bb39)
 # vReports
 
 ![](https://img.shields.io/github/downloads/vipexv/vReports/total?logo=github)![](https://img.shields.io/github/downloads/vipexv/vReports/latest/total?logo=github)![](https://img.shields.io/github/contributors/vipexv/vReports?logo=github)![](https://img.shields.io/github/v/release/vipexv/vReports?logo=github) 
