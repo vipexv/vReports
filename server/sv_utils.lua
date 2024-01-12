@@ -1,3 +1,17 @@
+---comment
+---@return table | any
+LoadLeaderboard = function()
+    local leaderboardJson = LoadResourceFile(GetCurrentResourceName(), "data.json")
+
+    if not leaderboardJson then return Debug("[func:LoadLeaderboard] leaderboardJson is null.") end
+
+    return json.decode(leaderboardJson)
+end
+
+SaveLeaderboard = function(newLeaderboardTable)
+    SaveResourceFile(GetCurrentResourceName(), "data.json", json.encode(newLeaderboardTable, { indent = false }), -1)
+end
+
 ShowNotification = function(data)
     if not data then return Debug("[func:server:ShowNotification] first param is null.") end
 
@@ -5,6 +19,7 @@ ShowNotification = function(data)
 
     TriggerClientEvent("UIMessage", data.target, "nui:notify", data)
 end
+
 GetDiscordID = function(source)
     local returnValue = nil
     for idIndex = 1, GetNumPlayerIdentifiers(source) do

@@ -50,6 +50,13 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
         end
     end
 
+    if not data.isMyReportsPage and thisReport then
+        local staff = OnlineStaff[tonumber(source)]
+        staff.concludedReportsThisSession = staff.concludedReportsThisSession + 1
+
+        Debug("[reportmenu:server:delete] concludedReportsThisSession value has been incremented", json.encode(staff))
+    end
+
     if thisReport then
         ShowNotification(
             {

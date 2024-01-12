@@ -9,11 +9,16 @@ function CPlayer:new(player)
 
     local discordId = GetDiscordID(player)
     local playerName = GetPlayerName(player)
+    local identifiers = GetPlayerIdentifiersWithoutIP(player)
 
     if not Config.UseDiscordRestAPI then
         if IsPlayerAceAllowed(player, Config.AcePerm) then
             isStaff = true
-            OnlineStaff[tonumber(player)] = {}
+            OnlineStaff[tonumber(player)] = {
+                id = player,
+                identifiers = identifiers,
+                concludedReportsThisSession = 0
+            }
             TriggerClientEvent("vadmin:cb:updatePermissions", player, Config.AllowedPermissions)
             Debug(("[func:CPlayer:new] (ACEPermissions) %s (ID - %s) was authenticated as staff."):format(
                 playerName, player))
@@ -28,7 +33,8 @@ function CPlayer:new(player)
                     isStaff = true
                     OnlineStaff[tonumber(player)] = {
                         id = player,
-                        concludedReportsThisSession = 0
+                        concludedReportsThisSession = 0,
+                        identifiers = identifiers,
                     }
                     Debug(("[func:CPlayer:new] (DiscordAPI) %s (ID - %s) was authenticated as staff."):format(
                         playerName, player))
@@ -40,7 +46,7 @@ function CPlayer:new(player)
     local obj = {
         name = playerName,
         id = player,
-        identifiers = GetPlayerIdentifiersWithoutIP(player),
+        identifiers = identifiers,
         isStaff = isStaff,
     }
 
