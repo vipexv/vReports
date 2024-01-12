@@ -180,9 +180,9 @@ const App: React.FC = () => {
 
           <Divider size="xs" />
 
-          <div className="flex justify-center items-center mt-2">
+          <div className="flex flex-col items-center mt-2">
             <SegmentedControl
-              className="border-[2px] bg-secondary"
+              className="border-[2px] bg-secondary m-auto mb-2"
               value={currentTab}
               onChange={(e) => {
                 setCurrentTab(e);
@@ -216,6 +216,13 @@ const App: React.FC = () => {
                 },
               ]}
             />
+            <div className="flex">
+              <input
+                type="text"
+                className="outline-none w-full h-full border-[2px] bg-secondary ml-auto py-[5px] px-[5px] rounded focus:border-blue-400 transition-all"
+                placeholder="Search..."
+              />
+            </div>
           </div>
           <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
             {CurrentView && <CurrentView />}
