@@ -5,7 +5,7 @@ import {
   Select,
   Transition,
 } from "@mantine/core";
-import { AlertTriangle, Flag, ShieldAlert } from "lucide-react";
+import { AlertTriangle, Cog, Flag, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
@@ -14,6 +14,8 @@ import { isEnvBrowser } from "../utils/misc";
 import "./App.css";
 import { Report } from "./reports";
 import { Button } from "./ui/button";
+import { MdLeaderboard } from "react-icons/md";
+import { TbFileReport } from "react-icons/tb";
 
 import Reports from "./reports";
 import { toast } from "sonner";
@@ -126,19 +128,9 @@ const App: React.FC = () => {
                     <ShieldAlert size={18} className="mr-1 text-blue-400" />
                     Report Menu
                   </h1>
-                  {/* <Button
-                    className="border-[2px] ml-auto rounded bg-secondary text-white mr-1"
-                    disabled={userRateLimited}
-                    onClick={() => {
-                      fetchNui("reportmenu:nuicb:refresh", {});
-                      setUserRateLimited(true);
-                      setTimeout(() => {
-                        setUserRateLimited(false);
-                      }, 2500);
-                    }}
-                  >
-                    <RefreshCw size={16} strokeWidth={2.25} />
-                  </Button> */}
+                  <Button className="border-[2px] ml-auto rounded bg-secondary text-white mr-1">
+                    <Cog size={16} strokeWidth={2.25} />
+                  </Button>
                 </div>
 
                 <Divider size="xs" />
@@ -166,20 +158,34 @@ const App: React.FC = () => {
                           </>
                         ),
                       },
-                      // {
-                      //   value: "leaderboard",
-                      //   label: (
-                      //     <>
-                      //       <div className="flex justify-center items-center gap-1 text-white">
-                      //         <MdLeaderboard
-                      //           size={14}
-                      //           className="text-yellow-500"
-                      //         />
-                      //         Leaderboard
-                      //       </div>
-                      //     </>
-                      //   ),
-                      // },
+                      {
+                        value: "myreports",
+                        label: (
+                          <>
+                            <div className="flex justify-center items-center gap-1 text-white">
+                              <TbFileReport
+                                size={14}
+                                className="text-blue-500"
+                              />
+                              My Reports
+                            </div>
+                          </>
+                        ),
+                      },
+                      {
+                        value: "leaderboard",
+                        label: (
+                          <>
+                            <div className="flex justify-center items-center gap-1 text-white">
+                              <MdLeaderboard
+                                size={14}
+                                className="text-yellow-500"
+                              />
+                              Leaderboard
+                            </div>
+                          </>
+                        ),
+                      },
                     ]}
                   />
                   <div className="flex">
@@ -194,13 +200,25 @@ const App: React.FC = () => {
                   </div>
                 </div>
                 <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
-                  {!searchQuery ? (
+                  {currentTab === "reports" ? (
                     <>
-                      <Reports reports={activeReports} />
+                      {!searchQuery ? (
+                        <>
+                          <Reports reports={activeReports} />
+                        </>
+                      ) : (
+                        <>
+                          <Reports reports={filteredReports} />
+                        </>
+                      )}
+                    </>
+                  ) : currentTab === "leaderboard" ? (
+                    <>
+                      <div>leaderboard</div>
                     </>
                   ) : (
                     <>
-                      <Reports reports={filteredReports} />
+                      <div>my reports</div>
                     </>
                   )}
                 </div>
