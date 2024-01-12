@@ -33,7 +33,7 @@ RegisterNetEvent("reportmenu:server:cb:leaderboard", function()
 
     local leaderboard = LoadLeaderboard()
 
-    TriggerClientEvent("reportmenu:client:cb:reports", source, leaderboard)
+    TriggerClientEvent("reportmenu:client:cb:leaderboard", source, leaderboard)
 end)
 
 RegisterNetEvent("reportmenu:server:cb:reports", function()

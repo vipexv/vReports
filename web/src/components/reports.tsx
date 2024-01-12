@@ -7,6 +7,7 @@ import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
 import "./App.css";
 import { Button } from "./ui/button";
+import { debugData } from "@/utils/debugData";
 
 const types = ["Bug", "Question", "Gameplay"];
 
@@ -29,6 +30,7 @@ const testReports = Array.from({ length: 100 }, (_, index) => ({
   id: index,
   type: types[Math.floor(Math.random() * types.length)],
   description: "Very Very racist personeeeeeeeeeeeeeeeee!",
+  playerName: `Test: ${index}`,
   timedate: getCurrentDateTime(),
   title: `Title ${index}`,
   state: {
@@ -63,12 +65,12 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
   const [currReport, setCurrReport] = useState(initStateCurrReport);
   const [modalActive, setModalActive] = useState(false);
 
-  // debugData([
-  //   {
-  //     action: "nui:state:reports",
-  //     data: testReports,
-  //   },
-  // ]);
+  debugData([
+    {
+      action: "nui:state:reports",
+      data: testReports,
+    },
+  ]);
 
   return (
     <>
@@ -142,10 +144,9 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
             </p>
           </div>
           <div className="rounded py-1 px-2 flex flex-col gap-2 justify-center">
-            <p className="text-white font-main">Player Name</p>
+            <p className="font-main">Player Name</p>
             {currReport.playerName}
-            <p className="text-white font-main">Report Description</p>
-
+            <p className="font-main">Report Description</p>
             {currReport.description}
           </div>
         </div>

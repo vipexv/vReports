@@ -8,7 +8,7 @@ RegisterCommand(Config.ReportMenuCommand, function()
     UIMessage("nui:state:myreports", MyReports)
 
     if PlayerData.isStaff then
-        TriggerServerEvent("reportmenu:client:cb:reports")
+        TriggerServerEvent("reportmenu:server:cb:leaderboard")
     end
 
     ToggleNuiFrame(true)

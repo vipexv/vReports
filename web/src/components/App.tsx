@@ -1,3 +1,4 @@
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import {
   Divider,
   Modal,
@@ -9,17 +10,15 @@ import { AlertTriangle, Cog, Flag, ShieldAlert, Terminal } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { MdLeaderboard } from "react-icons/md";
 import { TbFileReport } from "react-icons/tb";
+import { toast } from "sonner";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
 import "./App.css";
-import { Report } from "./reports";
-import { Button } from "./ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { toast } from "sonner";
 import Leaderboard from "./leaderboard";
-import Reports from "./reports";
+import Reports, { Report } from "./reports";
+import { Button } from "./ui/button";
 
 debugData([
   {
@@ -72,37 +71,27 @@ const App: React.FC = () => {
 
   const [globalLeaderboardData, setLeaderboardData] = useState<
     LeaderboardData[]
-  >([
-    {
-      concludedReports: 1,
-      name: "vipex",
-      identifiers: [
-        "license:6c5a04a27880f9ef14f177cd52b495d6d9517187",
-        "xbl:2535413463113628",
-        "live:844425900550524",
-        "discord:470311257589809152",
-        "fivem:1124792",
-        "license2:6c5a04a27880f9ef14f177cd52b495d6d9517187",
-      ],
-    },
-  ]);
-
-  useNuiEvent("nui:state:leaderboard", setLeaderboardData);
+  >([]);
 
   // Spaghetti code and it's horrible, i'm doing this at 6 am after being at it since 11 PM, i should stop but i'm rushing it to improve later.
   useEffect(() => {
     const filterPlayers = (data: Report[], query: string) => {
       return data
-        ? Object.values(data).filter((player) => {
-            if (!player || !player.id) return;
-            const playerId = player.id?.toString().toLowerCase();
+        ? Object.values(data).filter((report) => {
+            if (!report) return;
+            const lowerQuery = query.toLowerCase();
+            const reportPlayerId = report.id?.toString().toLowerCase();
+            const reportPlayerName = report.playerName.toLowerCase();
+            const reportTitle = report.title.toLowerCase();
+            const reportTimeDate = report.timedate.toLowerCase();
+            const reportType = report.type.toLowerCase();
 
             return (
-              player.playerName.toLowerCase().includes(query) ||
-              playerId.includes(query) ||
-              player.title.toLowerCase().includes(query) ||
-              player.timedate.toLowerCase().includes(query) ||
-              player.type.toLowerCase().includes(query)
+              reportPlayerId.includes(lowerQuery) ||
+              reportPlayerName.includes(lowerQuery) ||
+              reportTitle.includes(lowerQuery) ||
+              reportTimeDate.includes(lowerQuery) ||
+              reportType.includes(lowerQuery)
             );
           })
         : [];
@@ -141,6 +130,8 @@ const App: React.FC = () => {
   useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
   useNuiEvent("nui:state:reports", setActiveReports);
+
+  useNuiEvent("nui:state:leaderboard", setLeaderboardData);
 
   useNuiEvent("nui:resetstates", () => {
     // Only search query for now.
@@ -215,7 +206,7 @@ const App: React.FC = () => {
                         >
                           <Terminal size={18} className="-mt-[6px]" />
                           <AlertTitle className="-mt-1 truncate">
-                            The leaderboard updates data once you leave.
+                            The leaderboard updates your data once you leave.
                           </AlertTitle>
                         </Alert>
                       </>
