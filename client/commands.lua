@@ -12,6 +12,7 @@ RegisterCommand(Config.ReportMenuCommand, function()
             UIMessage("nui:state:settings", settings)
             Debug("Settings loaded: ", settingsKvp)
         end
+        Script.state.settingsLoaded = true
     end
     UIMessage("nui:state:playerdata", PlayerData)
     UIMessage("nui:state:myreports", MyReports)
