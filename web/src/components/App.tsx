@@ -65,11 +65,20 @@ const views: views = {
   reports: Reports,
 };
 
+const initialReportData = {
+  title: "",
+  type: "Gameplay",
+  description: "",
+};
+
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [currentTab, setCurrentTab] = useState("reports");
   const [userRateLimited, setUserRateLimited] = useState(false);
-  const [reportMenuVisible, setReportMenuVisible] = useState(true);
+  const [reportMenuVisible, setReportMenuVisible] = useState(false);
+  const [reportData, setReportData] = useState(initialReportData);
+
+  useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
   const CurrentView = views[currentTab];
 
@@ -114,7 +123,7 @@ const App: React.FC = () => {
                     className="border-[2px] ml-auto rounded bg-secondary text-white mr-1"
                     disabled={userRateLimited}
                     onClick={() => {
-                      fetchNui("staffchat:nuicb:refresh");
+                      fetchNui("reportmenu:nuicb:refresh", {});
                       setUserRateLimited(true);
                       setTimeout(() => {
                         setUserRateLimited(false);
@@ -274,6 +283,7 @@ const App: React.FC = () => {
         opened={reportMenuVisible}
         onClose={() => {
           setReportMenuVisible(false);
+          fetchNui("hideFrame");
         }}
         classNames={{
           body: "bg-secondary border-[2px]",
@@ -281,11 +291,19 @@ const App: React.FC = () => {
         withCloseButton={false}
         centered
       >
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setReportMenuVisible(false);
+            fetchNui("hideFrame");
+            fetchNui("reportmenu:nuicb:sendreport", reportData);
+            setReportData(initialReportData);
+          }}
+        >
           <div>
             <p className="font-main mb-2 text-xl flex justify-center items-center gap-1">
               <ShieldAlert size={16} color="#ff0000" strokeWidth={2.25} />
-              Report
+              Report Menu
             </p>
             <Divider size={"sm"} />
             <div className="grid grid-cols-2 mt-2 gap-4">
@@ -293,12 +311,29 @@ const App: React.FC = () => {
                 type="text"
                 className="outline-none text-sm font-main w-full h-full border-[2px] bg-secondary ml-auto py-[5px] px-[5px] rounded focus:border-blue-400 transition-all"
                 placeholder="Title"
+                onChange={(value) => {
+                  const data = {
+                    ...reportData,
+                    title: value.target.value,
+                  };
+
+                  setReportData(data);
+                }}
                 required
               />
               <Select
                 placeholder="Report Type"
                 className="font-main"
-                defaultValue={"Gameplay"}
+                value={reportData.type}
+                onChange={(value) => {
+                  if (!value) return;
+
+                  const data = {
+                    ...reportData,
+                    type: value,
+                  };
+                  setReportData(data);
+                }}
                 classNames={{
                   input:
                     "bg-secondary font-main border-[2px] border-primary text-white",
@@ -312,6 +347,14 @@ const App: React.FC = () => {
                 type="text"
                 className="outline-none col-span-2 text-base font-main w-full h-full border-[2px] bg-secondary ml-auto py-[5px] px-[5px] rounded focus:border-blue-400 transition-all"
                 placeholder="Description..."
+                onChange={(value) => {
+                  const data = {
+                    ...reportData,
+                    description: value.target.value,
+                  };
+
+                  setReportData(data);
+                }}
                 required
               />
               <Button

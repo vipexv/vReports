@@ -1,5 +1,5 @@
 OnlineStaff = {}
-Reports = {}
+ActiveReports = {}
 
 AddEventHandler("playerJoining", function(_srcString, _oldId)
     if source <= 0 then
@@ -37,7 +37,7 @@ SetTimeout(1000, function()
             local player = Players[i]
             if OnlineStaff[player] then
                 return Debug(("(Error) [Thread:LoopPlayerList] %s (ID - %s) is already in the OnlineStaff table.")
-                :format(GetPlayerName(player), player))
+                    :format(GetPlayerName(player), player))
             end
 
             CPlayer:new(player)

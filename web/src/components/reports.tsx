@@ -8,7 +8,6 @@ import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
 import "./App.css";
 import { Button } from "./ui/button";
-import { debugData } from "@/utils/debugData";
 
 const types = ["Bug", "Question", "Gameplay"];
 
@@ -23,7 +22,7 @@ const getCurrentDateTime = () => {
 
   const formattedTime = `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
 
-  return { formattedTime, formattedDate };
+  return `${formattedTime} ${formattedDate}`;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,20 +39,19 @@ const testReports = Array.from({ length: 100 }, (_, index) => ({
 
 export interface Report {
   id: number | string;
+  playerName: string;
   type: "Bug" | "Question" | "Gameplay" | "";
   description: string;
-  datetime: unknown;
+  datetime: string;
   title: "";
 }
 
 const initStateCurrReport: Report = {
   id: 0,
+  playerName: "",
   type: "",
   description: "",
-  datetime: {
-    formattedDate: "",
-    formattedTime: "",
-  },
+  datetime: "",
   title: "",
 };
 
@@ -64,12 +62,12 @@ const Reports: React.FC = () => {
 
   useNuiEvent("nui:state:reports", setActiveReports);
 
-  debugData([
-    {
-      action: "nui:state:reports",
-      data: testReports,
-    },
-  ]);
+  // debugData([
+  //   {
+  //     action: "nui:state:reports",
+  //     data: testReports,
+  //   },
+  // ]);
 
   return (
     <>
@@ -78,6 +76,7 @@ const Reports: React.FC = () => {
           {activeReports.length > 0 ? (
             <>
               {Object.values(activeReports).map((report, index) => {
+                if (!report) return;
                 return (
                   <>
                     <div
@@ -101,8 +100,7 @@ const Reports: React.FC = () => {
                           {report.description}
                         </p>
                         <p className="ml-auto bg-primary px-2 ml-4 font-main text-xs opacity-50">
-                          {report.datetime.formattedTime}
-                          {report.datetime.formattedDate}
+                          {report.datetime}
                         </p>
                       </div>
                     </div>
@@ -128,10 +126,9 @@ const Reports: React.FC = () => {
           body: "border-[2px] bg-secondary",
         }}
         withCloseButton={false}
-        // title={`[${currReport.id}] ${currReport.title}`}
       >
         <div className="flex flex-col gap-1 justify-center p-2 rounded">
-          <div className="flex m-2 font-main">
+          <div className="flex m-2 font-main text-white">
             <p>
               [{currReport.id}] {currReport.title}
             </p>
@@ -139,7 +136,9 @@ const Reports: React.FC = () => {
               {currReport.type}
             </p>
           </div>
-          <div className="rounded py-1 px-2 flex flex-col justify-center">
+          <div className="rounded py-1 px-2 flex flex-col gap-2 justify-center">
+            <p className="text-white font-main">Player Name</p>
+            {currReport.playerName}
             <p className="text-white font-main">Report Description</p>
 
             {currReport.description}
@@ -149,7 +148,7 @@ const Reports: React.FC = () => {
           <Button
             className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
             onClick={() => {
-              fetchNui("staffchat:nuicb:goto", currReport);
+              fetchNui("reportmenu:nuicb:goto", currReport);
               setCurrReport(initStateCurrReport);
               setModalActive(false);
             }}
@@ -159,7 +158,7 @@ const Reports: React.FC = () => {
           <Button
             className="text-xs rounded-[2px] m-0 border-[2px] bg-secondary"
             onClick={() => {
-              fetchNui("staffchat:nuicb:bring", currReport);
+              fetchNui("reportmenu:nuicb:bring", currReport);
               setCurrReport(initStateCurrReport);
               setModalActive(false);
             }}
@@ -169,7 +168,7 @@ const Reports: React.FC = () => {
           <Button
             className="text-xs rounded-[2px] m-0 border-[2px] bg-destructive"
             onClick={() => {
-              fetchNui("staffchat:nuicb:delete", currReport);
+              fetchNui("reportmenu:nuicb:delete", currReport);
               setCurrReport(initStateCurrReport);
               setModalActive(false);
             }}

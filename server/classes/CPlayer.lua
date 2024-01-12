@@ -38,13 +38,10 @@ function CPlayer:new(player)
         name = playerName,
         id = player,
         identifiers = GetPlayerIdentifiersWithoutIP(player),
-        tokens = GetPlayerTokens(player),
         isStaff = isStaff,
-        roles = Config.UseDiscordRestAPI and GetDiscordRoles(discordId, player) or nil,
-        avatar = Config.UseDiscordRestAPI and GetDiscordAvatar(discordId, player) or nil
     }
 
-    TriggerClientEvent("staffchat:state:playerdata", player, obj)
+    TriggerClientEvent("reportmenu:state:playerdata", player, obj)
 
     setmetatable(obj, self)
     self.__index = self

@@ -6,8 +6,14 @@ RegisterNetEvent("UIMessage", function(action, data)
         GetInvokingResource())
 end)
 
-RegisterNetEvent("staffchat:state:playerdata", function(data)
+RegisterNetEvent("reportmenu:state:playerdata", function(data)
     PlayerData = data
 
-    Debug("[event:staffchat:state:playerdata] data param: ", json.encode(data))
+    Debug("[event:reportmenu:state:playerdata] data param: ", json.encode(data))
+end)
+
+RegisterNetEvent("reportmenu:client:cb:reports", function(activeReports)
+    if not activeReports then return Debug("[reportmenu:client:cb:reports] First param is null.") end
+
+    UIMessage("nui:state:reports", activeReports)
 end)
