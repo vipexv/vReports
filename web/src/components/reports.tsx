@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { FaPeoplePulling } from "react-icons/fa6";
 import { GiTeleport } from "react-icons/gi";
 
-import { useNuiEvent } from "@/hooks/useNuiEvent";
 import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
 import "./App.css";
@@ -55,12 +54,13 @@ const initStateCurrReport: Report = {
   title: "",
 };
 
-const Reports: React.FC = () => {
+interface Props {
+  reports: Report[];
+}
+
+const Reports: React.FC<Props> = ({ reports }) => {
   const [currReport, setCurrReport] = useState(initStateCurrReport);
   const [modalActive, setModalActive] = useState(false);
-  const [activeReports, setActiveReports] = useState<Report[]>([]);
-
-  useNuiEvent("nui:state:reports", setActiveReports);
 
   // debugData([
   //   {
@@ -73,9 +73,9 @@ const Reports: React.FC = () => {
     <>
       <ScrollArea className="w-full h-full">
         <div className="grid grid-cols-1 m-5 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {activeReports.length > 0 ? (
+          {reports.length > 0 ? (
             <>
-              {Object.values(activeReports).map((report, index) => {
+              {Object.values(reports).map((report, index) => {
                 if (!report) return;
                 return (
                   <>

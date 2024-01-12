@@ -26,12 +26,12 @@ import {
   Users,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { MdLeaderboard } from "react-icons/md";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
 import "./App.css";
+import { Report } from "./reports";
 import { Button } from "./ui/button";
 
 import {
@@ -57,14 +57,6 @@ debugData([
   },
 ]);
 
-interface views {
-  [key: string]: React.ComponentType;
-}
-
-const views: views = {
-  reports: Reports,
-};
-
 const initialReportData = {
   title: "",
   type: "Gameplay",
@@ -77,10 +69,12 @@ const App: React.FC = () => {
   const [userRateLimited, setUserRateLimited] = useState(false);
   const [reportMenuVisible, setReportMenuVisible] = useState(false);
   const [reportData, setReportData] = useState(initialReportData);
+  const [activeReports, setActiveReports] = useState<Report[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
-  const CurrentView = views[currentTab];
+  useNuiEvent("nui:state:reports", setActiveReports);
 
   useNuiEvent<boolean>("setVisible", setVisible);
 
@@ -132,93 +126,6 @@ const App: React.FC = () => {
                   >
                     <RefreshCw size={16} strokeWidth={2.25} />
                   </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button className="border-[2px] rounded bg-secondary hover:bg-primary text-white mr-1">
-                        <User size={14} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-primary border-[2px]">
-                      <DropdownMenuLabel>Profile</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                          <User className="mr-2 h-4 w-4" />
-                          <span>Profile</span>
-                          <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          <span>Billing</span>
-                          <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Settings className="mr-2 h-4 w-4" />
-                          <span>Settings</span>
-                          <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Keyboard className="mr-2 h-4 w-4" />
-                          <span>Keyboard shortcuts</span>
-                          <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                          <Users className="mr-2 h-4 w-4" />
-                          <span>Team</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            <span>Invite users</span>
-                          </DropdownMenuSubTrigger>
-                          <DropdownMenuPortal>
-                            <DropdownMenuSubContent className="bg-primary border-[2px]">
-                              <DropdownMenuItem>
-                                <Mail className="mr-2 h-4 w-4" />
-                                <span>Email</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                <span>Message</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                <span>More...</span>
-                              </DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                          </DropdownMenuPortal>
-                        </DropdownMenuSub>
-                        <DropdownMenuItem>
-                          <Plus className="mr-2 h-4 w-4" />
-                          <span>New Team</span>
-                          <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Github className="mr-2 h-4 w-4" />
-                        <span>GitHub</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <LifeBuoy className="mr-2 h-4 w-4" />
-                        <span>Support</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem disabled>
-                        <Cloud className="mr-2 h-4 w-4" />
-                        <span>API</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Log out</span>
-                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
 
                 <Divider size="xs" />
@@ -271,7 +178,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
                 <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
-                  {CurrentView && <CurrentView />}
+                  <Reports reports={activeReports} />
                 </div>
                 <p className="font-main flex justify-end m-2">v1.0.0</p>
               </div>
