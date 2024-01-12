@@ -246,20 +246,20 @@ const App: React.FC = () => {
                           </>
                         ),
                       },
-                      {
-                        value: "leaderboard",
-                        label: (
-                          <>
-                            <div className="flex justify-center items-center gap-1 text-white">
-                              <MdLeaderboard
-                                size={14}
-                                className="text-yellow-500"
-                              />
-                              Leaderboard
-                            </div>
-                          </>
-                        ),
-                      },
+                      // {
+                      //   value: "leaderboard",
+                      //   label: (
+                      //     <>
+                      //       <div className="flex justify-center items-center gap-1 text-white">
+                      //         <MdLeaderboard
+                      //           size={14}
+                      //           className="text-yellow-500"
+                      //         />
+                      //         Leaderboard
+                      //       </div>
+                      //     </>
+                      //   ),
+                      // },
                     ]}
                   />
                   <div className="flex">

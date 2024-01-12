@@ -26,7 +26,9 @@ function CPlayer:new(player)
                 local discordRoleId = discordRoles[i]
                 if discordRoleId == Config.RoleID then
                     isStaff = true
-                    OnlineStaff[tonumber(player)] = {}
+                    OnlineStaff[tonumber(player)] = {
+                        id = player
+                    }
                     Debug(("[func:CPlayer:new] (DiscordAPI) %s (ID - %s) was authenticated as staff."):format(
                         playerName, player))
                 end

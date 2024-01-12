@@ -30,7 +30,7 @@ const testReports = Array.from({ length: 100 }, (_, index) => ({
   id: index,
   type: types[Math.floor(Math.random() * types.length)],
   description: "Very Very racist personeeeeeeeeeeeeeeeee!",
-  datetime: getCurrentDateTime(),
+  timedate: getCurrentDateTime(),
   title: `Title ${index}`,
   state: {
     concluded: false,
@@ -42,7 +42,7 @@ export interface Report {
   playerName: string;
   type: "Bug" | "Question" | "Gameplay" | "";
   description: string;
-  datetime: string;
+  timedate: string;
   title: "";
 }
 
@@ -51,7 +51,7 @@ const initStateCurrReport: Report = {
   playerName: "",
   type: "",
   description: "",
-  datetime: "",
+  timedate: "",
   title: "",
 };
 
@@ -100,7 +100,7 @@ const Reports: React.FC = () => {
                           {report.description}
                         </p>
                         <p className="ml-auto bg-primary px-2 ml-4 font-main text-xs opacity-50">
-                          {report.datetime}
+                          {report.timedate}
                         </p>
                       </div>
                     </div>

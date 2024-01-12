@@ -18,8 +18,10 @@ RegisterNetEvent("reportmenu:client:cb:reports", function(activeReports)
     UIMessage("nui:state:reports", activeReports)
 end)
 
-RegisterNetEvent("reportmenu:nuicb:refresh", function(data, cb)
-    Debug("[reportmenu:nuicb:refresh] Called.")
-    TriggerServerEvent("reportmenu:server:cb:reports")
-    cb({})
-end)
+
+-- RegisterNetEvent("reportmenu:client:update", function(activeReports)
+--     if not activeReports then return Debug("[reportmenu:client:cb:update] First param is null.") end
+
+--     UIMessage("nui:state:reports", activeReports)
+--     Debug("Reports updated")
+-- end)
