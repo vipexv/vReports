@@ -6,6 +6,7 @@ author 'vipex'
 ui_page 'web/dist/index.html'
 
 shared_scripts {
+	"config.lua",
 	"shared/main.lua",
 	"shared/types.lua"
 }
