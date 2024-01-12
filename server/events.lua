@@ -1,15 +1,24 @@
 RegisterNetEvent("reportmenu:server:report", function(data)
     if not data then return Debug("[netEvent:reportmenu:server:report] first param is null.") end
+    local randomKey = math.random(100000, 999999)
 
     data.id = source
     data.timedate = ("%s | %s"):format(os.date("%X"), os.date("%x"))
+    data.randomKey = randomKey
+    ActiveReports[randomKey] = data
 
-    ActiveReports[tonumber(source)] = data
 
-    -- for i = 1, #OnlineStaff do
-    --     local staff = OnlineStaff[i]
-    --     TriggerClientEvent("reportmenu:client:update", staff.id, ActiveReports)
-    -- end
+    for k, v in pairs(OnlineStaff) do
+        TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)
+        ShowNotification(
+            {
+                title = "Report Menu",
+                description = "New Report Recieved.",
+                target = v.id,
+                appearOnlyWhenNuiNotOpen = true
+            }
+        )
+    end
 
     Debug("[netEvent:reportmenu:server:report] Active Reports table: ", json.encode(ActiveReports))
 end)
@@ -31,14 +40,20 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
             :format(GetPlayerName(source), source))
     end
 
-    if ActiveReports[tonumber(data.id)] then
-        ActiveReports[tonumber(data.id)] = nil
-        Debug("ActiveReport with the ID: ", data.id, "was found and was deleted.")
+    if ActiveReports[data.randomKey] then
+        ShowNotification(
+            {
+                title = "Report Menu",
+                description = ("Your report has been closed by %s (ID - %s)"):format(GetPlayerName(source), source),
+                target = data.id,
+            }
+        )
+        ActiveReports[data.randomKey] = nil
+        Debug("ActiveReport with the ID: ", data.randomKey, "was found and was deleted.")
 
-        -- for i = 1, #OnlineStaff do
-        --     local staff = OnlineStaff[i]
-        --     TriggerClientEvent("reportmenu:client:update", staff.id, ActiveReports)
-        -- end
+        for k, v in pairs(OnlineStaff) do
+            TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)
+        end
     end
 end)
 
@@ -51,7 +66,15 @@ RegisterNetEvent("reportmenu:server:goto", function(data)
 
     local targetPed = GetPlayerPed(data.id)
 
-    if not targetPed then return Debug("[reportmenu:server:goto] targetPed is null.") end
+    if not targetPed then
+        return ShowNotification(
+            {
+                title = "Error Encountered",
+                description = "Couldn't get the Target Ped",
+                target = source
+            }
+        )
+    end
 
     local srcPed = GetPlayerPed(source)
 
@@ -76,7 +99,16 @@ RegisterNetEvent("reportmenu:server:bring", function(data)
     local srcPed = GetPlayerPed(source)
     local targetPed = GetPlayerPed(data.id)
 
-    if not targetPed then return Debug("[reportmenu:server:bring] targetPed is null.") end
+    if not targetPed then
+        return ShowNotification(
+            {
+                title = "Error Encountered",
+                description = "Couldn't get the Target Ped",
+                target = source
+            }
+        )
+    end
+
     if not srcPed then return Debug("[reportmenu:server:bring] srcPed is somehow null.") end
 
     local srcPedCoords = GetEntityCoords(srcPed)

@@ -29,3 +29,9 @@ function ShowFloatingText(coords, msg)
     BeginTextCommandDisplayHelp('floatingTextNotification')
     EndTextCommandDisplayHelp(2, false, false, -1)
 end
+
+ShowNotification = function(data)
+    if not data then return Debug("[func:ShowNotification] first param is null.") end
+
+    UIMessage("nui:notify", data)
+end

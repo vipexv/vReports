@@ -73,7 +73,7 @@ const Reports: React.FC<Props> = ({ reports }) => {
     <>
       <ScrollArea className="w-full h-full">
         <div className="grid grid-cols-1 m-5 sm:grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {reports.length > 0 ? (
+          {reports.length !== 0 ? (
             <>
               {Object.values(reports).map((report, index) => {
                 if (!report) return;
@@ -171,10 +171,6 @@ const Reports: React.FC<Props> = ({ reports }) => {
               fetchNui("reportmenu:nuicb:delete", currReport);
               setCurrReport(initStateCurrReport);
               setModalActive(false);
-              // Wait 500 MS for the task to finish then refresh.
-              setTimeout(() => {
-                fetchNui("reportmenu:nuicb:refresh", {});
-              }, 500);
             }}
           >
             <AlertTriangle size={16} strokeWidth={2.5} className="mr-1" />

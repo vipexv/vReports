@@ -1,5 +1,6 @@
 RegisterNUICallback('hideFrame', function(_, cb)
     ToggleNuiFrame(false)
+    UIMessage("nui:resetstates")
     Debug('[nuicb:hideFrame] called')
     cb({})
 end)

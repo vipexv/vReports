@@ -9,7 +9,7 @@ RegisterCommand(Config.ReportMenuCommand, function()
             json.encode(PlayerData))
     end
 
-    TriggerServerEvent("reportmenu:server:cb:reports")
+    -- TriggerServerEvent("reportmenu:server:cb:reports")
 
     ToggleNuiFrame(true)
     Debug("[command:show-nui] ToggleNuiFrame called and set to true.")

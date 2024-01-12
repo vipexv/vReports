@@ -1,3 +1,10 @@
+ShowNotification = function(data)
+    if not data then return Debug("[func:server:ShowNotification] first param is null.") end
+
+    if not data.target then Debug("[func:server:ShowNotification] data.target is null.") end
+
+    TriggerClientEvent("UIMessage", data.target, "nui:notify", data)
+end
 GetDiscordID = function(source)
     local returnValue = nil
     for idIndex = 1, GetNumPlayerIdentifiers(source) do
@@ -23,7 +30,7 @@ end
 VersionCheck = function(repository)
     local resource = GetInvokingResource() or GetCurrentResourceName()
 
-    local currentVersion = 'v1.1.1'
+    local currentVersion = 'v1.0.0'
 
     if currentVersion then
         currentVersion = currentVersion:match('%d+%.%d+%.%d+')

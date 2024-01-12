@@ -5,26 +5,7 @@ import {
   Select,
   Transition,
 } from "@mantine/core";
-import {
-  AlertTriangle,
-  Cloud,
-  CreditCard,
-  Flag,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  RefreshCw,
-  Settings,
-  ShieldAlert,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
+import { AlertTriangle, Flag, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { debugData } from "../utils/debugData";
@@ -34,21 +15,8 @@ import "./App.css";
 import { Report } from "./reports";
 import { Button } from "./ui/button";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Reports from "./reports";
+import { toast } from "sonner";
 
 debugData([
   {
@@ -66,23 +34,68 @@ const initialReportData = {
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [currentTab, setCurrentTab] = useState("reports");
-  const [userRateLimited, setUserRateLimited] = useState(false);
   const [reportMenuVisible, setReportMenuVisible] = useState(false);
   const [reportData, setReportData] = useState(initialReportData);
   const [activeReports, setActiveReports] = useState<Report[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredReports, setFilteredReports] = useState<Report[]>([]);
+
+  // Spaghetti code and it's horrible, i'm doing this at 6 am after being at it since 11 PM, i should stop but i'm rushing it to improve later.
+  useEffect(() => {
+    const filterPlayers = (data: Report[], query: string) => {
+      return data
+        ? Object.values(data).filter((player) => {
+            if (!player || !player.id) return;
+            const playerId = player.id?.toString().toLowerCase();
+
+            return (
+              player.playerName.toLowerCase().includes(query) ||
+              playerId.includes(query) ||
+              player.title.toLowerCase().includes(query) ||
+              player.timedate.toLowerCase().includes(query) ||
+              player.type.toLowerCase().includes(query)
+            );
+          })
+        : [];
+    };
+
+    setFilteredReports(filterPlayers(activeReports, searchQuery));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
   useNuiEvent("nui:state:reports", setActiveReports);
 
+  useNuiEvent("nui:resetstates", () => {
+    // Only search query for now.
+    setSearchQuery("");
+  });
+
+  interface notifyData {
+    title: string;
+    description: string;
+    appearOnlyWhenNuiNotOpen?: boolean;
+  }
+
   useNuiEvent<boolean>("setVisible", setVisible);
+
+  useNuiEvent<notifyData>("nui:notify", (data) => {
+    if (data.appearOnlyWhenNuiNotOpen && visible) return;
+    toast.success(data.title, {
+      description: data.description,
+      classNames: {
+        toast: "font-main bg-primary border border-[2px] rounded-[2px]",
+        default: "rounded-[2px] bg-primary",
+      },
+    });
+  });
 
   useEffect(() => {
     if (!visible) return;
 
     const keyHandler = (e: KeyboardEvent) => {
-      if (["Backspace", "Escape"].includes(e.code)) {
+      if (["Escape"].includes(e.code)) {
         if (!isEnvBrowser()) fetchNui("hideFrame");
         else setVisible(!visible);
       }
@@ -113,7 +126,7 @@ const App: React.FC = () => {
                     <ShieldAlert size={18} className="mr-1 text-blue-400" />
                     Report Menu
                   </h1>
-                  <Button
+                  {/* <Button
                     className="border-[2px] ml-auto rounded bg-secondary text-white mr-1"
                     disabled={userRateLimited}
                     onClick={() => {
@@ -125,7 +138,7 @@ const App: React.FC = () => {
                     }}
                   >
                     <RefreshCw size={16} strokeWidth={2.25} />
-                  </Button>
+                  </Button> */}
                 </div>
 
                 <Divider size="xs" />
@@ -172,13 +185,24 @@ const App: React.FC = () => {
                   <div className="flex">
                     <input
                       type="text"
-                      className="outline-none w-full h-full border-[2px] bg-secondary ml-auto py-[5px] px-[5px] rounded focus:border-blue-400 transition-all"
+                      className="outline-none w-full font-main h-full border-[2px] bg-secondary ml-auto py-[5px] px-[5px] rounded focus:border-blue-400 transition-all"
                       placeholder="Search..."
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                      }}
                     />
                   </div>
                 </div>
                 <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
-                  <Reports reports={activeReports} />
+                  {!searchQuery ? (
+                    <>
+                      <Reports reports={activeReports} />
+                    </>
+                  ) : (
+                    <>
+                      <Reports reports={filteredReports} />
+                    </>
+                  )}
                 </div>
                 <p className="font-main flex justify-end m-2">v1.0.0</p>
               </div>

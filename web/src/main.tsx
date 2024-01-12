@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider defaultColorScheme="dark">
       <App />
-      <Toaster />
+      <Toaster position="top-center" />
     </MantineProvider>
   </React.StrictMode>
 );
