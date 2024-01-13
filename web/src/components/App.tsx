@@ -476,7 +476,7 @@ const App: React.FC = () => {
                 }}
               >
                 <Checkbox
-                  label="Include nearest players."
+                  label="Include nearest players"
                   onChange={(checked) => {
                     const data = {
                       ...reportData,
