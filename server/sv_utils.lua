@@ -88,7 +88,7 @@ end
 
 if not LoadResourceFile(GetCurrentResourceName(), 'web/dist/index.html') then
     local err =
-    'Unable to load UI. Build vHud or download the latest release.\n https://github.com/vipexv/vReports/releases/latest'
+    'Unable to load UI. Build/Compiled vReports using `npm run build` on the script or download the latest release.\n https://github.com/vipexv/vReports/releases/latest'
     print(err)
 end
 
