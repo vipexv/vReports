@@ -29,7 +29,7 @@ function CPlayer:new(player)
         if discordRoles then
             for i = 1, #discordRoles do
                 local discordRoleId = discordRoles[i]
-                if discordRoleId == Config.RoleID then
+                if Config.RoleID[discordRoleId] then
                     isStaff = true
                     OnlineStaff[tonumber(player)] = {
                         id = player,
