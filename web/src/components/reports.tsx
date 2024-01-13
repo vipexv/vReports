@@ -6,6 +6,7 @@ import { GiTeleport } from "react-icons/gi";
 import { debugData } from "@/utils/debugData";
 import { fetchNui } from "@/utils/fetchNui";
 import { AlertTriangle } from "lucide-react";
+import { MdOutlineSocialDistance } from "react-icons/md";
 import "./App.css";
 import { Button } from "./ui/button";
 
@@ -33,10 +34,14 @@ const testReports = Array.from({ length: 100 }, (_, index) => ({
   playerName: `Test: ${index}`,
   timedate: getCurrentDateTime(),
   title: `Title ${index}`,
-  state: {
-    concluded: false,
-  },
+  nearestPlayers: [],
 }));
+
+interface nearestPlayers {
+  id: string | number;
+  name: string | number;
+  distance: string | number;
+}
 
 export interface Report {
   id: number | string;
@@ -45,6 +50,7 @@ export interface Report {
   description: string;
   timedate: string;
   title: "";
+  nearestPlayers?: nearestPlayers[];
 }
 
 const initStateCurrReport: Report = {
@@ -62,7 +68,7 @@ interface Props {
 }
 
 const Reports: React.FC<Props> = ({ reports, myReports }) => {
-  const [currReport, setCurrReport] = useState(initStateCurrReport);
+  const [currReport, setCurrReport] = useState<Report>(initStateCurrReport);
   const [modalActive, setModalActive] = useState(false);
 
   debugData([
@@ -125,6 +131,7 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
       <Modal
         opened={modalActive}
         centered
+        size={"lg"}
         onClose={() => {
           setModalActive(false);
           setCurrReport(initStateCurrReport);
@@ -148,6 +155,36 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
             {currReport.playerName}
             <p className="text-white font-main">Report Description</p>
             {currReport.description}
+
+            {currReport.nearestPlayers && (
+              <>
+                <p className="text-white font-main">Nearest Players</p>
+                <ScrollArea className="h-[30dvh] bg-primary border-[2px]">
+                  <div className=" py-4 px-4 rounded-[2px] gap-2 grid grid-cols-4 font-mwwwwwwwwwwwain text-sm">
+                    {currReport.nearestPlayers.length > 0 &&
+                      currReport.nearestPlayers.map((player, index) => (
+                        <>
+                          <div
+                            key={index}
+                            className="bg-secondary py-1 px-2 flex items-center"
+                          >
+                            <div className="p-1 flex items-center text-white">
+                              [{player.id}]{" "}
+                              <p className="ml-1 truncate max-w-[50px]">
+                                {player.name}
+                              </p>
+                            </div>
+                            <p className="ml-auto flex items-center bg-primary rounded-[2px] px-1">
+                              <MdOutlineSocialDistance className="mr-1" />{" "}
+                              {player.distance}
+                            </p>
+                          </div>
+                        </>
+                      ))}
+                  </div>
+                </ScrollArea>
+              </>
+            )}
           </div>
         </div>
         <div className="flex justify-end items-center mt-4 gap-2">

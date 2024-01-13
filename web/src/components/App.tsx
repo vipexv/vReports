@@ -1,9 +1,11 @@
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import {
+  Checkbox,
   Divider,
   Modal,
   SegmentedControl,
   Select,
+  Tooltip,
   Transition,
 } from "@mantine/core";
 import { AlertTriangle, Cog, Flag, ShieldAlert, Terminal } from "lucide-react";
@@ -35,13 +37,21 @@ debugData([
   },
 ]);
 
-const initialReportData = {
+export interface reportData {
+  title: string;
+  type: "Question" | "Bug" | "Gameplay";
+  description: string;
+  reportNearestPlayers: boolean;
+}
+
+const initialReportData: reportData = {
   title: "",
   type: "Gameplay",
   description: "",
+  reportNearestPlayers: false,
 };
 
-interface playerData {
+export interface playerData {
   name: string;
   id: string | number;
   identifiers: string[];
@@ -78,7 +88,7 @@ const App: React.FC = () => {
     playerData.isStaff ? "reports" : "myreports"
   );
   const [reportMenuVisible, setReportMenuVisible] = useState(false);
-  const [reportData, setReportData] = useState(initialReportData);
+  const [reportData, setReportData] = useState<reportData>(initialReportData);
   const [activeReports, setActiveReports] = useState<Report[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
@@ -425,10 +435,13 @@ const App: React.FC = () => {
                 onChange={(value) => {
                   if (!value) return;
 
-                  const data = {
+                  const typedValue = value as "Question" | "Bug" | "Gameplay";
+
+                  const data: reportData = {
                     ...reportData,
-                    type: value,
+                    type: typedValue,
                   };
+
                   setReportData(data);
                 }}
                 classNames={{
@@ -454,6 +467,26 @@ const App: React.FC = () => {
                 }}
                 required
               />
+              <Tooltip
+                label="Notifies staff of players near you in the report."
+                refProp="rootRef"
+                className="font-main rounded-[2px] bg-secondary text-white"
+                classNames={{
+                  tooltip: "border-[2px]",
+                }}
+              >
+                <Checkbox
+                  label="Include nearest players."
+                  onChange={(checked) => {
+                    const data = {
+                      ...reportData,
+                      reportNearestPlayers: checked.currentTarget.checked,
+                    };
+
+                    setReportData(data);
+                  }}
+                />
+              </Tooltip>
               <Button
                 className="text-xs rounded-[2px] m-0 border-[2px] bg-destructive col-span-2"
                 onClick={() => {}}

@@ -19,6 +19,32 @@ RegisterNuiCallback("reportmenu:nuicb:sendreport", function(data, cb)
 
     data.playerName = GetPlayerName(PlayerId())
 
+    if data.reportNearestPlayers then
+        data.nearestPlayers = {}
+        local players = GetActivePlayers()
+        local srcPlayerId = PlayerId()
+        local srcPed = PlayerPedId()
+        local srcCoords = GetEntityCoords(srcPed)
+
+        for i = 1, #players do
+            local playerId = players[i]
+            local playerPed = GetPlayerPed(playerId)
+            local playerCoords = GetEntityCoords(playerPed)
+
+            local distance = #(srcCoords - playerCoords)
+
+            if playerId ~= srcPlayerId and distance <= Config.MaxDistance then
+                data.nearestPlayers[#data.nearestPlayers + 1] = {
+                    id = GetPlayerServerId(playerId),
+                    name = GetPlayerName(playerId),
+                    distance = math.floor(distance),
+                }
+
+                Debug("[reportmenu:nuicb:sendreport] Player near us found: ", json.encode(data.nearestPlayers))
+            end
+        end
+    end
+
     TriggerServerEvent("reportmenu:server:report", data)
     cb({})
 end)
