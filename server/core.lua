@@ -19,6 +19,7 @@ AddEventHandler("playerJoining", function(_srcString, _oldId)
 
     CPlayer:new(source)
 end)
+
 ---@param identifiers table
 ---@param sourceIdentifiers table
 ---@return boolean

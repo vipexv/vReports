@@ -1,4 +1,3 @@
----comment
 ---@return table | any
 LoadLeaderboard = function()
     local leaderboardJson = LoadResourceFile(GetCurrentResourceName(), "data.json")

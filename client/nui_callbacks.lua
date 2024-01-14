@@ -44,8 +44,8 @@ end)
 RegisterNuiCallback("reportmenu:nuicb:delete", function(data, cb)
     if not data then return Debug("[reportmenu:nuicb:delete] first param is null.") end
 
-    -- if data.isMyReportsPage and MyReports[data.randomKey] then
-    --     MyReports[data.randomKey] = nil
+    -- if data.isMyReportsPage and MyReports[data.reportId] then
+    --     MyReports[data.reportId] = nil
     --     UIMessage("nui:state:myreports", MyReports)
     --     Debug("(reportmenu:nuicb:delete) Report deleted on the client sided `MyReports` table.")
     -- end
@@ -87,4 +87,9 @@ RegisterNuiCallback("reportmenu:nuicb:refresh", function(data, cb)
     Debug("[reportmenu:nuicb:refresh] Called.")
     TriggerServerEvent("reportmenu:server:cb:reports")
     cb({})
+end)
+
+RegisterNuiCallback("reportmenu:nuicb:sendmessage", function(data, cb)
+    Debug("[reportmenu:nuicb:sendmessage] data: ", json.encode(data))
+    TriggerServerEvent("reportmenu:server:sendmessage", data)
 end)

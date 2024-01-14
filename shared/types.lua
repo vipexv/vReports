@@ -11,6 +11,8 @@
 ---@field timedate string
 ---@field title string
 ---@field nearestPlayers nearestPlayer[]
+---@field messages message[]
+---@field reportId string
 
 ---@class OnlineStaff
 ---@field id number | string
@@ -22,3 +24,7 @@
 ---@field name string
 ---@field identifiers table
 ---@field isStaff boolean
+
+---@class message
+---@field data string
+---@field timedate string
