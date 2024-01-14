@@ -186,11 +186,11 @@ const App: React.FC = () => {
 
   useNuiEvent("nui:state:reports", setActiveReports);
 
-  useNuiEvent<ScriptConfig>("nui:state:scriptconfig", setScriptConfig);
-
   useNuiEvent("nui:state:leaderboard", setLeaderboardData);
 
   useNuiEvent("nui:state:settings", setUserSettings);
+
+  useNuiEvent("nui:state:scriptconfig", setScriptConfig);
 
   useNuiEvent("nui:resetstates", () => {
     // Only search query for now.

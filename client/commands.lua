@@ -14,6 +14,7 @@ RegisterCommand(Config.ReportMenuCommand, function()
         end
         Script.state.settingsLoaded = true
     end
+
     UIMessage("nui:state:playerdata", PlayerData)
     UIMessage("nui:state:myreports", MyReports)
 
