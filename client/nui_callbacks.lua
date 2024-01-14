@@ -5,14 +5,6 @@ RegisterNuiCallback('hideFrame', function(_, cb)
     cb({})
 end)
 
--- ex.
-RegisterNuiCallback('getClientData', function(data, cb)
-    local curCoords = GetEntityCoords(PlayerPedId())
-
-    local retData <const> = { x = curCoords.x, y = curCoords.y, z = curCoords.z }
-    cb(retData)
-end)
-
 RegisterNuiCallback("reportmenu:nuicb:sendreport", function(data, cb)
     if not data then return Debug("[reportmenu:nuicb:sendreport] first param is null.") end
     Debug("[reportmenu:nuicb:sendreport] Data param: ", json.encode(data))
