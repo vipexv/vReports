@@ -8,4 +8,6 @@ Config = {
     },
     ReportCommand = "report",      -- The name of the report command for normal players.
     ReportMenuCommand = "reports", -- The name of the command to open the reports menu for staff members.
+    NotificationPos =
+    "top-center"                   -- The position of the notifications: top-center, top-right, top-left, bottom-center, bottom-right, bottom-left
 }

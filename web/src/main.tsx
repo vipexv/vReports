@@ -3,7 +3,6 @@ import "@mantine/core/styles.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
-import { Toaster } from "@/components/ui/sonner";
 
 import "./index.css";
 
@@ -11,7 +10,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider defaultColorScheme="dark">
       <App />
-      <Toaster position="top-center" />
     </MantineProvider>
   </React.StrictMode>
 );
