@@ -1,4 +1,4 @@
-RegisterNUICallback('hideFrame', function(_, cb)
+RegisterNuiCallback('hideFrame', function(_, cb)
     ToggleNuiFrame(false)
     UIMessage("nui:resetstates")
     Debug('[nuicb:hideFrame] called')
@@ -6,7 +6,7 @@ RegisterNUICallback('hideFrame', function(_, cb)
 end)
 
 -- ex.
-RegisterNUICallback('getClientData', function(data, cb)
+RegisterNuiCallback('getClientData', function(data, cb)
     local curCoords = GetEntityCoords(PlayerPedId())
 
     local retData <const> = { x = curCoords.x, y = curCoords.y, z = curCoords.z }
@@ -91,7 +91,7 @@ RegisterNuiCallback("reportmenu:nuicb:bring", function(data, cb)
     cb({})
 end)
 
-RegisterNUICallback("reportmenu:nuicb:refresh", function(data, cb)
+RegisterNuiCallback("reportmenu:nuicb:refresh", function(data, cb)
     Debug("[reportmenu:nuicb:refresh] Called.")
     TriggerServerEvent("reportmenu:server:cb:reports")
     cb({})

@@ -10,6 +10,7 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     TriggerClientEvent("reportmenu:client:addactivereport", source, data)
 
     for k, v in pairs(OnlineStaff) do
+        ---@diagnostic disable-next-line: param-type-mismatch
         TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)
         ShowNotification(
             {

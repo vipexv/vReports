@@ -1,4 +1,24 @@
----@class Example
----@field exampleParam table
----@field exampleParam2 string
----@field exampleParam3 number
+---@class nearestPlayer
+---@field id string | number
+---@field name string | number
+---@field distance number
+
+---@class ActiveReport
+---@field id number | string
+---@field playerName string
+---@field type "Bug" | "Question" | "Gameplay"
+---@field description string
+---@field timedate string
+---@field title string
+---@field nearestPlayers nearestPlayer[]
+
+---@class OnlineStaff
+---@field id number | string
+---@field identifiers table
+---@field concludedReportsThisSession number
+
+
+---@class PlayerData
+---@field name string
+---@field identifiers table
+---@field isStaff boolean

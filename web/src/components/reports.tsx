@@ -37,7 +37,7 @@ const testReports = Array.from({ length: 100 }, (_, index) => ({
   nearestPlayers: [],
 }));
 
-interface nearestPlayers {
+interface nearestPlayer {
   id: string | number;
   name: string | number;
   distance: string | number;
@@ -50,7 +50,7 @@ export interface Report {
   description: string;
   timedate: string;
   title: "";
-  nearestPlayers?: nearestPlayers[];
+  nearestPlayers?: nearestPlayer[];
 }
 
 const initStateCurrReport: Report = {

@@ -1,4 +1,7 @@
+---@type OnlineStaff[]
 OnlineStaff = {}
+
+---@type ActiveReport[]
 ActiveReports = {}
 
 AddEventHandler("playerJoining", function(_srcString, _oldId)

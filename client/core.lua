@@ -5,4 +5,6 @@ Script = {
 }
 
 PlayerData = {}
+
+---@type ActiveReport[]
 MyReports = {}
