@@ -1,59 +1,69 @@
----comment
+-- Function to Load Leaderboard Data
 ---@return table | any
 LoadLeaderboard = function()
     local leaderboardJson = LoadResourceFile(GetCurrentResourceName(), "data.json")
-
-    if not leaderboardJson then return Debug("[func:LoadLeaderboard] leaderboardJson is null.") end
-
+    if not leaderboardJson then 
+        Debug("[func:LoadLeaderboard] leaderboardJson is null.") 
+        return {}
+    end
     return json.decode(leaderboardJson)
 end
 
+-- Function to Save Leaderboard Data
 SaveLeaderboard = function(newLeaderboardTable)
     SaveResourceFile(GetCurrentResourceName(), "data.json", json.encode(newLeaderboardTable, { indent = false }), -1)
 end
 
+-- Function to Show Notification to a Player
 ShowNotification = function(data)
-    if not data then return Debug("[func:server:ShowNotification] first param is null.") end
+    if not data then 
+        Debug("[func:server:ShowNotification] first param is null.") 
+        return 
+    end
 
-    if not data.target then Debug("[func:server:ShowNotification] data.target is null.") end
+    if not data.target then 
+        Debug("[func:server:ShowNotification] data.target is null.") 
+        return
+    end
 
     TriggerClientEvent("UIMessage", data.target, "nui:notify", data)
 end
 
+-- Function to Retrieve a Player's Discord ID
 GetDiscordID = function(source)
-    local returnValue = nil
     for idIndex = 1, GetNumPlayerIdentifiers(source) do
-        if GetPlayerIdentifier(source, idIndex) ~= nil and GetPlayerIdentifier(source, idIndex):sub(1, #("discord:")) == "discord:" then
-            returnValue = GetPlayerIdentifier(source, idIndex):gsub("discord:", "")
+        local identifier = GetPlayerIdentifier(source, idIndex)
+        if identifier and identifier:sub(1, #"discord:") == "discord:" then
+            return identifier:gsub("discord:", "")
         end
     end
-    return returnValue
+    return nil
 end
 
+-- Function to Get Player Identifiers Excluding IP Address
 GetPlayerIdentifiersWithoutIP = function(player)
     local identifiers = GetPlayerIdentifiers(player)
     local cleanedIdentifiers = {}
     for _, identifier in ipairs(identifiers) do
-        if not string.find(identifier, "ip:") then
+        if not identifier:find("ip:") then
             table.insert(cleanedIdentifiers, identifier)
         end
     end
     return cleanedIdentifiers
 end
 
--- Copy and pasta for VersionChecker func from ox_lib Credit: "https://github.com/overextended/ox_lib"
+-- Version Check Function
 VersionCheck = function(repository)
     local resource = GetInvokingResource() or GetCurrentResourceName()
-
-    local currentVersion = 'v1.0.1'
+    local currentVersion = 'v1.0.1' -- Current version of your resource
 
     if currentVersion then
         currentVersion = currentVersion:match('%d+%.%d+%.%d+')
     end
 
     if not currentVersion then
-        return print(("^1Unable to determine current resource version for '%s' ^0"):format(
-            resource))
+        print(("^1Unable to determine current resource version for '%s' ^0"):format(resource))
+        return
     end
 
     SetTimeout(1000, function()
@@ -72,24 +82,23 @@ VersionCheck = function(repository)
 
                 for i = 1, #cv do
                     local current, minimum = tonumber(cv[i]), tonumber(lv[i])
-
-                    if current ~= minimum then
-                        if current < minimum then
-                            return print(('^3An update is available for %s (current version: %s)\r\n%s^0'):format(
-                                resource, currentVersion, response.html_url))
-                        else
-                            break
-                        end
+                    if current < minimum then
+                        print(('^3An update is available for %s (current version: %s)\n%s^0'):format(
+                            resource, currentVersion, response.html_url))
+                        return
+                    elseif current > minimum then
+                        break
                     end
                 end
             end, 'GET')
     end)
 end
 
+-- UI Load Check
 if not LoadResourceFile(GetCurrentResourceName(), 'web/dist/index.html') then
-    local err =
-    'Unable to load UI. Build vReports or download the latest release.\n https://github.com/vipexv/vReports/releases/latest'
+    local err = 'Unable to load UI. Build vReports or download the latest release.\n https://github.com/vipexv/vReports/releases/latest'
     print(err)
 end
 
+-- Call to Version Check Function
 VersionCheck("vipexv/vReports")
