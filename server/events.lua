@@ -171,7 +171,7 @@ RegisterNetEvent("reportmenu:server:sendmessage", function(data)
     ---@type ActiveReport
     local report = data.report
 
-    if not OnlineStaff[srcNumber] or tonumber(report.id) ~= srcNumber then
+    if not OnlineStaff[srcNumber] and tonumber(report.id) ~= srcNumber then
         return Debug("[reportmenu:server:sendmessage] Insufficient access perms from source.")
     end
 
@@ -190,7 +190,8 @@ RegisterNetEvent("reportmenu:server:sendmessage", function(data)
         timedate = ("%s | %s"):format(os.date("%X"), os.date("%x"))
     }
 
-    TriggerClientEvent("reportmenu:client:updateactivereport", source, ActiveReports[report.reportId])
+    ---@diagnostic disable-next-line: param-type-mismatch
+    TriggerClientEvent("reportmenu:client:updateactivereport", report.id, ActiveReports[report.reportId])
 
     for _, v in pairs(OnlineStaff) do
         ShowNotification({

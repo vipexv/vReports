@@ -20,18 +20,18 @@ AddEventHandler("playerJoining", function(_srcString, _oldId)
     CPlayer:new(source)
 end)
 
----@param identifiers table
+---@param targetIdentifiers table
 ---@param sourceIdentifiers table
 ---@return boolean
-local function loopThroughIdentifiers(identifiers, sourceIdentifiers)
-    if not identifiers or not sourceIdentifiers then
+local function loopThroughIdentifiers(targetIdentifiers, sourceIdentifiers)
+    if not targetIdentifiers or not sourceIdentifiers then
         return false
     end
 
-    for _, bannedIdentifier in ipairs(identifiers) do
+    for _, targetIdentifier in ipairs(targetIdentifiers) do
         for _, sourceIdentifier in ipairs(sourceIdentifiers) do
-            if string.find(bannedIdentifier, sourceIdentifier) then
-                Debug("Identifier found: ", bannedIdentifier)
+            if string.find(targetIdentifier, sourceIdentifier) then
+                Debug("Identifier found: ", targetIdentifier)
                 return true
             end
         end
