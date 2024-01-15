@@ -405,7 +405,7 @@ const App: React.FC = () => {
                     </>
                   )}
                 </div>
-                <p className="font-main flex justify-end m-2">v1.0.2</p>
+                <p className="font-main flex justify-end m-2">v1.0.3</p>
               </div>
             </div>
           </>
