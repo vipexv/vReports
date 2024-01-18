@@ -21,12 +21,12 @@ RegisterNetEvent("reportmenu:server:report", function(data)
         Debug("staff var: ", json.encode(staff))
         Debug("Staff ID: ", staffId)
         ---@diagnostic disable-next-line: param-type-mismatch
-        TriggerClientEvent("reportmenu:client:update", staff.id, ActiveReports)
+        TriggerClientEvent("reportmenu:client:update", staffId, ActiveReports)
         ShowNotification(
             {
                 title = "Report Menu",
                 description = ("New Report: [%s]"):format(reportId),
-                target = staff.id,
+                target = staffId,
                 appearOnlyWhenNuiNotOpen = true
             }
         )

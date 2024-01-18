@@ -58,11 +58,11 @@ AddEventHandler("playerDropped", function(reason)
 
         if #leaderboard <= 0 then
             local staff = OnlineStaff[tonumber(source)]
-            table.insert(leaderboard, {
+            leaderboard[#leaderboard + 1] = {
                 name = GetPlayerName(staff.id),
                 identifiers = staff.identifiers,
                 concludedReports = staff.concludedReportsThisSession
-            })
+            }
             SaveLeaderboard(leaderboard)
             Debug("[playerDropped] leaderboard was null, so we just instantly stored the first data ever :o.")
         else
