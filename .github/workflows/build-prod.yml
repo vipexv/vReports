@@ -1,3 +1,5 @@
+# From txAdmin GitHub Repo: https://github.com/tabarra/txAdmin/blob/master/README.md
+
 name: Create Tagged Release Prod
 
 on: workflow_dispatch
@@ -23,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Download all modules
-        run: npm ci
+        run: cd web && npm ci
 
       - name: Build project
         run: npm run build
