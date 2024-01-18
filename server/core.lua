@@ -13,7 +13,7 @@ AddEventHandler("playerJoining", function(_srcString, _oldId)
     local playerName = GetPlayerName(source)
 
     if type(playerName) ~= "string" then
-        return Debug("(Error) [eventHandler:playerJoining] Player name isn't a string, Player name type: ",
+        return Debug("(Error) [eventHandler:playerJoining] Invalid Player name type: ",
             type(playerName))
     end
 
@@ -23,13 +23,15 @@ end)
 ---@param targetIdentifiers table
 ---@param sourceIdentifiers table
 ---@return boolean
-local function loopThroughIdentifiers(targetIdentifiers, sourceIdentifiers)
+local loopThroughIdentifiers = function(targetIdentifiers, sourceIdentifiers)
     if not targetIdentifiers or not sourceIdentifiers then
         return false
     end
 
-    for _, targetIdentifier in ipairs(targetIdentifiers) do
-        for _, sourceIdentifier in ipairs(sourceIdentifiers) do
+    for i = 1, #targetIdentifiers do
+        local targetIdentifier = targetIdentifiers[i]
+        for u = 1, #sourceIdentifiers do
+            local sourceIdentifier = sourceIdentifiers[u]
             if string.find(targetIdentifier, sourceIdentifier) then
                 Debug("Identifier found: ", targetIdentifier)
                 return true
@@ -37,39 +39,24 @@ local function loopThroughIdentifiers(targetIdentifiers, sourceIdentifiers)
         end
     end
 
+    -- for _, targetIdentifier in ipairs(targetIdentifiers) do
+    --     for _, sourceIdentifier in ipairs(sourceIdentifiers) do
+    --         if string.find(targetIdentifier, sourceIdentifier) then
+    --             Debug("Identifier found: ", targetIdentifier)
+    --             return true
+    --         end
+    --     end
+    -- end
+
     return false
 end
 
 AddEventHandler("playerDropped", function(reason)
-    if source <= 0 then
-        return Debug("(Error) [eventHandler:playerDropped] Source is nil.")
-    end
-
     if OnlineStaff[source] then
         local leaderboard = LoadLeaderboard()
         local identifiers = GetPlayerIdentifiersWithoutIP(source)
 
-        if #leaderboard > 0 then
-            for _, playerData in ipairs(leaderboard) do
-                local identifierCheck = loopThroughIdentifiers(playerData.identifiers, identifiers)
-                local staff = OnlineStaff[tonumber(source)]
-
-                if not identifierCheck then
-                    table.insert(leaderboard, {
-                        name = GetPlayerName(staff.id),
-                        identifiers = staff.identifiers,
-                        concludedReports = staff.concludedReportsThisSession
-                    })
-                    Debug("[playerDropped] identifierCheck returned false, so we created one: ", json.encode(leaderboard))
-                    SaveLeaderboard(leaderboard)
-                else
-                    playerData.concludedReports = playerData.concludedReports + staff.concludedReportsThisSession
-                    SaveLeaderboard(leaderboard)
-                    Debug("[playerDropped] identifierCheck returned true, so we updated the concludedReports value: ",
-                        json.encode(leaderboard))
-                end
-            end
-        else
+        if not leaderboard then
             local staff = OnlineStaff[tonumber(source)]
             table.insert(leaderboard, {
                 name = GetPlayerName(staff.id),
@@ -78,8 +65,25 @@ AddEventHandler("playerDropped", function(reason)
             })
             SaveLeaderboard(leaderboard)
             Debug("[playerDropped] leaderboard was null, so we just instantly stored the first data ever :o.")
+        else
+            for i = 1, #leaderboard do
+                local playerData = leaderboard[i]
+                local findPlayerInLeaderboard = loopThroughIdentifiers(playerData.identifiers, identifiers)
+                local staff = OnlineStaff[tonumber(source)]
+
+                if not findPlayerInLeaderboard then
+                    leaderboard[#leaderboard + 1] = {
+                        name = GetPlayerName(staff.id),
+                        identifiers = staff.identifiers,
+                        concludedReports = staff.concludedReportsThisSession
+                    }
+                else
+                    playerData.concludedReports = playerData.concludedReports + staff.concludedReportsThisSession
+                end
+            end
         end
 
+        SaveLeaderboard(leaderboard)
         OnlineStaff[source] = nil
         Debug(("[eventHandler:playerDropped] %s was removed from the OnlineStaff table."):format(GetPlayerName(source)))
     end
