@@ -74,6 +74,8 @@ interface notifyData {
   appearOnlyWhenNuiNotOpen?: boolean;
 }
 
+type ToasterProps = React.ComponentProps<typeof Toaster>;
+
 export interface ScriptConfig {
   Debug: boolean;
   UseDiscordRestAPI: boolean;
@@ -82,13 +84,7 @@ export interface ScriptConfig {
   RoleIDs: Record<string, boolean>;
   ReportCommand: string;
   ReportMenuCommand: string;
-  NotificationPos:
-    | "top-center"
-    | "top-right"
-    | "top-left"
-    | "bottom-center"
-    | "bottom-right"
-    | "bottom-left";
+  NotificationPos: ToasterProps["position"];
 }
 
 const App: React.FC = () => {

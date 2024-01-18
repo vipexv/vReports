@@ -172,7 +172,7 @@ const Reports: React.FC<Props> = ({ reports, myReports }) => {
             {currReport.messages && (
               <>
                 <p className="text-white font-main">Report Messages</p>
-                <ScrollArea className="max-h-[20dvh] bg-primary border-[2px]">
+                <ScrollArea className="h-[20dvh] bg-primary border-[2px]">
                   <div className="flex flex-col gap-2">
                     {currReport.messages.map((message, index) => (
                       <>

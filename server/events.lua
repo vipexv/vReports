@@ -17,14 +17,17 @@ RegisterNetEvent("reportmenu:server:report", function(data)
 
     TriggerClientEvent("reportmenu:client:addactivereport", source, data)
 
-    for k, v in pairs(OnlineStaff) do
+    -- Needs more testing for errors and i don't know why it threw an error a last time i did this, but it's not happening anymore, just incase i added more debug statements to it.
+    for i = 1, #OnlineStaff do
+        local staff = OnlineStaff[i]
+        Debug("staff var: ", json.encode(staff))
         ---@diagnostic disable-next-line: param-type-mismatch
-        TriggerClientEvent("reportmenu:client:update", v.id, ActiveReports)
+        TriggerClientEvent("reportmenu:client:update", staff.id, ActiveReports)
         ShowNotification(
             {
                 title = "Report Menu",
-                description = "New Report Recieved.",
-                target = v.id,
+                description = ("New Report: [%s]"):format(reportId),
+                target = staff.id,
                 appearOnlyWhenNuiNotOpen = true
             }
         )
@@ -166,12 +169,10 @@ end)
 RegisterNetEvent("reportmenu:server:sendmessage", function(data)
     if not data then return Debug("[reportmenu:server:sendmessage] missing first param") end
 
-    local srcNumber = tonumber(source)
-
     ---@type ActiveReport
     local report = data.report
 
-    if not OnlineStaff[srcNumber] and tonumber(report.id) ~= srcNumber then
+    if not OnlineStaff[tonumber(source)] and report.id ~= source then
         return Debug("[reportmenu:server:sendmessage] Insufficient access perms from source.")
     end
 

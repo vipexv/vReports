@@ -56,7 +56,3 @@ function CPlayer:new(player)
     self.__index = self
     return obj
 end
-
-function CPlayer:displayInfo()
-    Debug(("Data: %s"):format(json.encode(self)))
-end
