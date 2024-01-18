@@ -61,8 +61,6 @@ jobs:
       - name: Bundle files
         run: |
           ls
-          cd ../
-          ls
           mkdir -p ./temp/vReports
           mkdir -p ./temp/vReports/web/
           cp ./{LICENSE,README.md,fxmanifest.lua,config.lua,sv_config.lua} ./temp/vReports
