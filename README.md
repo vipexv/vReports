@@ -13,4 +13,4 @@ If you would like to contribute, please go ahead and head over to the GitHub pag
 
 * Config
   
-![image](https://github.com/vipexv/vReports/assets/101529155/416919f0-344f-4c1f-8552-6eb5de44c446)
+![image](https://github.com/vipexv/vReports/assets/101529155/e637db20-cb03-42c6-bef6-defe737339ee)
