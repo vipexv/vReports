@@ -27,7 +27,7 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
-        run: npm install
+        run: cd web && npm install
 
       - name: Bump package version
         run: npm version ${{ github.ref_name }}
