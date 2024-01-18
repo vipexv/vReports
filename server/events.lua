@@ -17,10 +17,9 @@ RegisterNetEvent("reportmenu:server:report", function(data)
 
     TriggerClientEvent("reportmenu:client:addactivereport", source, data)
 
-    -- Needs more testing for errors and i don't know why it threw an error a last time i did this, but it's not happening anymore, just incase i added more debug statements to it.
-    for i = 1, #OnlineStaff do
-        local staff = OnlineStaff[i]
+    for staffId, staff in pairs(OnlineStaff) do
         Debug("staff var: ", json.encode(staff))
+        Debug("Staff ID: ", staffId)
         ---@diagnostic disable-next-line: param-type-mismatch
         TriggerClientEvent("reportmenu:client:update", staff.id, ActiveReports)
         ShowNotification(

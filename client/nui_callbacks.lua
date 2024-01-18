@@ -38,6 +38,10 @@ RegisterNuiCallback("reportmenu:nuicb:sendreport", function(data, cb)
     end
 
     TriggerServerEvent("reportmenu:server:report", data)
+    ShowNotification({
+        title = "Report Menu",
+        description = ("Your new report has been submitted, do /%s for more info."):format(Config.ReportMenuCommand),
+    })
     cb({})
 end)
 

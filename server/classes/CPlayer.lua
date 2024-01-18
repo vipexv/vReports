@@ -14,6 +14,7 @@ function CPlayer:new(player)
     if not Config.UseDiscordRestAPI then
         if IsPlayerAceAllowed(player, Config.AcePerm) then
             isStaff = true
+            Debug("OnlineStaff size: ", #OnlineStaff)
             OnlineStaff[tonumber(player)] = {
                 id = player,
                 identifiers = identifiers,
