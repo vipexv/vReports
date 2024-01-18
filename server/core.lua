@@ -56,7 +56,7 @@ AddEventHandler("playerDropped", function(reason)
         local leaderboard = LoadLeaderboard()
         local identifiers = GetPlayerIdentifiersWithoutIP(source)
 
-        if not leaderboard then
+        if #leaderboard <= 0 then
             local staff = OnlineStaff[tonumber(source)]
             table.insert(leaderboard, {
                 name = GetPlayerName(staff.id),
