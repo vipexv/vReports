@@ -320,7 +320,7 @@ const App: React.FC = () => {
                     </>
                   )}
                 </div>
-                <p className="font-main flex justify-end m-2">v1.0.4</p>
+                <p className="font-main flex justify-end m-2">v1.0.5</p>
               </div>
             </div>
           </>
