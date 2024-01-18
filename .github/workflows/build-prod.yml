@@ -29,9 +29,9 @@ jobs:
       - name: Install dependencies
         run: cd web && npm install
 
-      - name: Bump package version
-        run: npm version ${{ github.ref_name }}
-        working-directory: package
+      # - name: Bump package version
+      #   run: npm version ${{ github.ref_name }}
+      #   working-directory: web
 
       - name: Run build
         run: npm run build
@@ -39,10 +39,10 @@ jobs:
         env:
           CI: false
 
-      - name: Bump manifest version
-        run: node .github/actions/bump-manifest-version.js
-        env:
-          TGT_RELEASE_VERSION: ${{ github.ref_name }}
+      # - name: Bump manifest version
+      #   run: node .github/actions/bump-manifest-version.js
+      #   env:
+      #     TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
       - name: Push manifest change
         uses: EndBug/add-and-commit@v8
