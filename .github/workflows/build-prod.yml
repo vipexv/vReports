@@ -75,7 +75,7 @@ jobs:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           title: ${{ env.RELEASE_VERSION }}
           prerelease: false
-          files: ox_lib.zip
+          files: vReports.zip
 
         env:
           CI: false
