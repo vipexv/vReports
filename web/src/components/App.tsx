@@ -1,8 +1,6 @@
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Divider, SegmentedControl, Transition } from "@mantine/core";
-import { Cog, Flag, ShieldAlert, Terminal } from "lucide-react";
+import { Cog, Flag, ShieldAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { MdLeaderboard } from "react-icons/md";
 import { TbFileReport } from "react-icons/tb";
 import { Toaster, toast } from "sonner";
 import { useNuiEvent } from "../hooks/useNuiEvent";
@@ -10,7 +8,6 @@ import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
 import "./App.css";
-import Leaderboard from "./leaderboard";
 import ReportModal from "./reportModal";
 import Reports, { Report } from "./reports";
 import { Button } from "./ui/button";
@@ -58,12 +55,6 @@ const initialPlayerData: playerData = {
   isStaff: true,
 };
 
-export interface LeaderboardData {
-  concludedReports: number;
-  name: string;
-  identifiers: string[];
-}
-
 export interface UserSettings {
   notifications: boolean;
 }
@@ -99,10 +90,6 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [myReports, setMyReports] = useState<Report[]>([]);
-  const [filteredLeaderboardData, setFilteredLeaderboardData] = useState<
-    LeaderboardData[]
-  >([]);
-
   const [scriptConfig, setScriptConfig] = useState<ScriptConfig>({
     Debug: true,
     UseDiscordRestAPI: true,
@@ -119,10 +106,6 @@ const App: React.FC = () => {
   const [userSettings, setUserSettings] = useState<UserSettings>({
     notifications: true,
   });
-
-  const [globalLeaderboardData, setLeaderboardData] = useState<
-    LeaderboardData[]
-  >([]);
 
   // Spaghetti code and it's horrible, i'm doing this at 6 am after being at it since 11 PM, i should stop but i'm rushing it to improve later.
   useEffect(() => {
@@ -148,23 +131,6 @@ const App: React.FC = () => {
         : [];
     };
 
-    const filterLeaderboardData = (data: LeaderboardData[], query: string) => {
-      return data
-        ? Object.values(data).filter((player) => {
-            if (!player) return;
-
-            return player.name.toLowerCase().includes(query);
-          })
-        : [];
-    };
-
-    if (currentTab === "leaderboard") {
-      setFilteredLeaderboardData(
-        filterLeaderboardData(globalLeaderboardData, searchQuery)
-      );
-      return;
-    }
-
     setFilteredReports(
       filterPlayers(
         currentTab === "reports" ? activeReports : myReports,
@@ -181,8 +147,6 @@ const App: React.FC = () => {
   useNuiEvent("nui:state:reportmenu", setReportMenuVisible);
 
   useNuiEvent("nui:state:reports", setActiveReports);
-
-  useNuiEvent("nui:state:leaderboard", setLeaderboardData);
 
   useNuiEvent("nui:state:settings", setUserSettings);
 
@@ -245,26 +209,6 @@ const App: React.FC = () => {
                     <ShieldAlert size={18} className="mr-1 text-blue-400" />
                     Report Menu
                   </h1>
-                  <Transition
-                    mounted={currentTab === "leaderboard"}
-                    transition={"scale-y"}
-                    duration={400}
-                    timingFunction="ease"
-                  >
-                    {(styles) => (
-                      <>
-                        <Alert
-                          className={`bg-secondary font-main w-[30dvw] m-auto rounded-[2px] border-[2px] h-[4dvh]`}
-                          style={styles}
-                        >
-                          <Terminal size={18} className="-mt-[6px]" />
-                          <AlertTitle className="-mt-1 truncate">
-                            The leaderboard updates your data once you leave.
-                          </AlertTitle>
-                        </Alert>
-                      </>
-                    )}
-                  </Transition>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button className="border-[2px] ml-auto rounded bg-secondary text-white mr-1">
@@ -333,21 +277,6 @@ const App: React.FC = () => {
                           </>
                         ),
                       },
-                      {
-                        value: "leaderboard",
-                        disabled: !playerData.isStaff,
-                        label: (
-                          <>
-                            <div className="flex justify-center items-center gap-1 text-white">
-                              <MdLeaderboard
-                                size={14}
-                                className="text-yellow-500"
-                              />
-                              Leaderboard
-                            </div>
-                          </>
-                        ),
-                      },
                     ]}
                   />
                   <div className="flex">
@@ -375,16 +304,6 @@ const App: React.FC = () => {
                             myReports={false}
                           />
                         </>
-                      )}
-                    </>
-                  ) : currentTab === "leaderboard" ? (
-                    <>
-                      {!searchQuery ? (
-                        <Leaderboard leaderboardData={globalLeaderboardData} />
-                      ) : (
-                        <Leaderboard
-                          leaderboardData={filteredLeaderboardData}
-                        />
                       )}
                     </>
                   ) : (

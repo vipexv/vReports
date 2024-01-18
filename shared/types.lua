@@ -16,9 +16,7 @@
 
 ---@class OnlineStaff
 ---@field id number | string
----@field identifiers table
----@field concludedReportsThisSession number
-
+---@field license string
 
 ---@class PlayerData
 ---@field name string

@@ -11,6 +11,27 @@ SaveLeaderboard = function(newLeaderboardTable)
     SaveResourceFile(GetCurrentResourceName(), "data.json", json.encode(newLeaderboardTable, { indent = false }), -1)
 end
 
+---@param targetIdentifiers table
+---@param sourceIdentifiers table
+---@return boolean
+LoopThroughIdentifiers = function(targetIdentifiers, sourceIdentifiers)
+    if not targetIdentifiers or not sourceIdentifiers then
+        return false
+    end
+
+    for _, targetIdentifier in ipairs(targetIdentifiers) do
+        for _, sourceIdentifier in ipairs(sourceIdentifiers) do
+            if string.find(targetIdentifier, sourceIdentifier) then
+                Debug("Identifier found: ", targetIdentifier)
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+
 ShowNotification = function(data)
     if not data then return Debug("[func:server:ShowNotification] first param is null.") end
 
@@ -26,6 +47,28 @@ GetDiscordID = function(source)
             returnValue = GetPlayerIdentifier(source, idIndex):gsub("discord:", "")
         end
     end
+    return returnValue
+end
+
+---@param source any
+---@return string
+GetLicenseIdentifier = function(source)
+    local returnValue = nil
+    local identifiers = GetPlayerIdentifiers(source)
+
+    for i = 1, #identifiers do
+        local identifier = identifiers[i]
+        if string.find(identifier, "license:") then
+            returnValue = identifier:gsub("license:", "")
+            break
+        end
+    end
+
+    if not returnValue then
+        Debug("[func:GetLicenseIdentifier] License couldn't be found.")
+        return ""
+    end
+
     return returnValue
 end
 

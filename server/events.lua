@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 RegisterNetEvent("reportmenu:server:report", function(data)
     if not data then return Debug("[netEvent:reportmenu:server:report] first param is null.") end
     local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -35,18 +36,6 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     Debug("[netEvent:reportmenu:server:report] Active Reports table: ", json.encode(ActiveReports))
 end)
 
-RegisterNetEvent("reportmenu:server:cb:leaderboard", function()
-    if not OnlineStaff[tonumber(source)] then
-        return Debug(
-            ("[reportmenu:server:cb:leaderboard] %s (ID -%s) Isn't a staff member but somehow called the event.")
-            :format(GetPlayerName(source), source))
-    end
-
-    local leaderboard = LoadLeaderboard()
-
-    TriggerClientEvent("reportmenu:client:cb:leaderboard", source, leaderboard)
-end)
-
 RegisterNetEvent("reportmenu:server:cb:reports", function()
     if not OnlineStaff[tonumber(source)] then
         return Debug(
@@ -71,13 +60,6 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
             return Debug(
                 "(reportmenu:server:delete) Player attempted to delete a report but it wasn't them who sent it.")
         end
-    end
-
-    if not data.isMyReportsPage and thisReport then
-        local staff = OnlineStaff[tonumber(source)]
-        staff.concludedReportsThisSession = staff.concludedReportsThisSession + 1
-
-        Debug("[reportmenu:server:delete] concludedReportsThisSession value has been incremented", json.encode(staff))
     end
 
     if thisReport then
