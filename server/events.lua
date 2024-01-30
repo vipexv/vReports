@@ -106,7 +106,7 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
                 fields = {
                     {
                         name = 'Concluded By',
-                        value = ("` %s (ID - %s)`"):format(sourceName, source),
+                        value = ("`%s (ID - %s)`"):format(sourceName, source),
                         inline = true
                     }
                 }
