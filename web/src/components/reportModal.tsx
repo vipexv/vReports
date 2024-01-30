@@ -118,6 +118,9 @@ const ReportModal: React.FC = ({
               >
                 <Checkbox
                   label="Include nearest players"
+                  classNames={{
+                    label: "mr-1 font-normal"
+                  }}
                   onChange={(checked) => {
                     const data = {
                       ...reportData,
