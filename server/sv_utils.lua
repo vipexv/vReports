@@ -11,6 +11,31 @@ SaveLeaderboard = function(newLeaderboardTable)
     SaveResourceFile(GetCurrentResourceName(), "data.json", json.encode(newLeaderboardTable, { indent = false }), -1)
 end
 
+
+
+---@param data FetchData
+FetchWebhook = function(data)
+    if not Config.Logging then return end
+
+    if not data.webhook:find("https://") or not data.webhook then return Debug("[FetchWebhook] Invalid Webhook URL") end
+
+    -- Convert to hexadecimal
+    data.embed.color = tonumber(data.embed.color:gsub("#", ""), 16)
+
+    data.embed.timestamp = os.date('!%Y-%m-%dT%H:%M:%S')
+    data.embed.footer = { ['text'] = 'vReports © 2024' }
+
+    PerformHttpRequest(data.webhook, function(status, body, headers, errorData)
+        if status == 204 then return end
+
+        Debug(("Status: %s | Body: %s | Headers: %s | errorData: %s"):format(status, body, headers, errorData))
+    end, 'POST', json.encode({
+        username = "vReports",
+        avatar_url = "https://i.imgur.com/BPeqUTG.png",
+        embeds = { data.embed }
+    }), { ["Content-Type"] = "application/json" })
+end
+
 ---@param targetIdentifiers table
 ---@param sourceIdentifiers table
 ---@return boolean
@@ -87,7 +112,7 @@ end
 VersionCheck = function(repository)
     local resource = GetInvokingResource() or GetCurrentResourceName()
 
-    local currentVersion = 'v1.0.5'
+    local currentVersion = 'v1.0.6'
 
     if currentVersion then
         currentVersion = currentVersion:match('%d+%.%d+%.%d+')

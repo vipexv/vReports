@@ -1,0 +1,12 @@
+{
+  "Lua.workspace.library": [
+    "c:\\Users\\1400v\\.vscode\\extensions\\heyyczer.fivem2vscode-2.0.20\\Lua\\runtime",
+    "c:\\Users\\1400v\\.vscode\\extensions\\heyyczer.fivem2vscode-2.0.20\\Lua\\natives\\CFX-NATIVE",
+    "c:\\Users\\1400v\\.vscode\\extensions\\heyyczer.fivem2vscode-2.0.20\\Lua\\natives\\GTAV",
+    "c:\\Users\\1400v\\.vscode\\extensions\\overextended.cfxlua-vscode-1.7.11\\plugin\\library\\runtime",
+    "c:\\Users\\1400v\\.vscode\\extensions\\overextended.cfxlua-vscode-1.7.11\\plugin\\library\\natives\\CFX-NATIVE",
+    "c:\\Users\\1400v\\.vscode\\extensions\\overextended.cfxlua-vscode-1.7.11\\plugin\\library\\natives\\GTAV",
+    "C:/Users/1400v/AppData/Roaming/Code/User/globalStorage/sumneko.lua/addonManager/addons/fivem/module/library"
+  ],
+  "Lua.workspace.checkThirdParty": false
+}

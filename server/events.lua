@@ -1,4 +1,6 @@
 ---@diagnostic disable: need-check-nil
+
+---@param data ActiveReport
 RegisterNetEvent("reportmenu:server:report", function(data)
     if not data then return Debug("[netEvent:reportmenu:server:report] first param is null.") end
     local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -9,10 +11,12 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     local rint_num = math.random(1, 5000)
 
     local reportId = tostring(rchar .. rint_num)
+    local sourceName = GetPlayerName(source)
 
     data.id = source
     data.timedate = ("%s | %s"):format(os.date("%X"), os.date("%x"))
     data.reportId = reportId
+    Debug(json.encode(data))
 
     ActiveReports[reportId] = data
 
@@ -33,6 +37,32 @@ RegisterNetEvent("reportmenu:server:report", function(data)
         )
     end
 
+    FetchWebhook({
+        webhook = SVConfig['Webhooks'].ReportSent,
+        embed = {
+            title = 'New Report Recieved',
+            description = ('**Report ID**: `%s`'):format(reportId),
+            color = '#1a1a1a',
+            fields = {
+                {
+                    name = 'Sent by',
+                    value = ("`%s (ID - %s)`"):format(sourceName, source),
+                    inline = true
+                },
+                {
+                    name = 'Report Title',
+                    value = ("`%s`"):format(data.title),
+                    inline = true
+                },
+                {
+                    name = 'Report Type',
+                    value = ("`%s`"):format(data.type),
+                    inline = true
+                },
+            }
+        }
+    })
+
     Debug("[netEvent:reportmenu:server:report] Active Reports table: ", json.encode(ActiveReports))
 end)
 
@@ -47,6 +77,8 @@ RegisterNetEvent("reportmenu:server:cb:reports", function()
 end)
 
 RegisterNetEvent("reportmenu:server:delete", function(data)
+    local webhookQueryData = ""
+
     if not OnlineStaff[tonumber(source)] and not data.isMyReportsPage then
         return Debug(
             ("[netEvent:reportmenu:server:delete] %s (ID -%s) Isn't a staff member but somehow called the event.")
@@ -63,11 +95,29 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
     end
 
     if thisReport then
+        local sourceName = GetPlayerName(source)
+
+        FetchWebhook({
+            webhook = SVConfig['Webhooks'].ReportConcluded,
+            embed = {
+                title = 'Report Closed',
+                description = ('**Report ID**: `%s`'):format(data.reportId),
+                color = '#1a1a1a',
+                fields = {
+                    {
+                        name = 'Concluded By',
+                        value = ("` %s (ID - %s)`"):format(sourceName, source),
+                        inline = true
+                    }
+                }
+            }
+        })
+
         ShowNotification(
             {
                 title = "Report Menu",
                 description = data.isMyReportsPage and "You have closed this report." or
-                    ("Your report has been closed by %s (ID - %s)"):format(GetPlayerName(source), source),
+                    ("Your report has been closed by %s (ID - %s)"):format(sourceName, source),
                 target = data.id,
             }
         )

@@ -26,3 +26,20 @@
 ---@class message
 ---@field data string
 ---@field timedate string
+
+---@class FetchData
+---@field webhook string
+---@field embed EmbedData
+
+---@class EmbedData
+---@field title string
+---@field description string
+---@field color string | number
+---@field fields FetchFields[]
+---@field footer? {}
+---@field timestamp? osdate | string
+
+---@class FetchFields
+---@field name string
+---@field value? string
+---@field inline? boolean
