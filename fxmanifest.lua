@@ -1,6 +1,8 @@
 fx_version "cerulean"
-lua54 'yes'
 game 'gta5'
+
+lua54 'yes'
+use_experimental_fxv2_oal "yes"
 
 author 'vipex [Discord: vipex.v]'
 description 'Advanced Free and Standalone Report Menu for FiveM'
