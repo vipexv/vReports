@@ -5,7 +5,6 @@ end, false)
 
 RegisterCommand(Config.ReportMenuCommand, function()
     if not Script.state.settingsLoaded then
-        Debug("Loading settings.")
         local settingsKvp = GetResourceKvpString("reportmenu:settings")
         if settingsKvp then
             local settings = json.decode(settingsKvp)
@@ -13,6 +12,10 @@ RegisterCommand(Config.ReportMenuCommand, function()
             Debug("Settings loaded: ", settingsKvp)
         end
         Script.state.settingsLoaded = true
+        if PlayerData.isStaff then
+            Debug("Updating active reports. \n PlayerData: ", json.encode(PlayerData))
+            TriggerServerEvent("reportmenu:server:cb:reports")
+        end
     end
 
     UIMessage("nui:state:playerdata", PlayerData)
