@@ -292,31 +292,16 @@ const App: React.FC = () => {
                 </div>
                 <div className="border-[2px] flex justify-center items-center h-[55dvh] rounded m-10 mt-5">
                   {currentTab === "reports" ? (
-                    <>
-                      {!searchQuery ? (
-                        <>
-                          <Reports reports={activeReports} myReports={false} />
-                        </>
-                      ) : (
-                        <>
-                          <Reports
-                            reports={filteredReports}
-                            myReports={false}
-                          />
-                        </>
-                      )}
-                    </>
+                    <Reports
+                      reports={!searchQuery ? activeReports : filteredReports}
+                      myReports={false}
+                    />
                   ) : (
                     <>
-                      {!searchQuery ? (
-                        <>
-                          <Reports reports={myReports} myReports={true} />
-                        </>
-                      ) : (
-                        <>
-                          <Reports reports={filteredReports} myReports={true} />
-                        </>
-                      )}
+                      <Reports
+                        reports={!searchQuery ? myReports : filteredReports}
+                        myReports={true}
+                      />
                     </>
                   )}
                 </div>
