@@ -14,3 +14,7 @@ If you would like to contribute, please go ahead and head over to the GitHub pag
 * Config
   
 ![image](https://github.com/vipexv/vReports/assets/101529155/e637db20-cb03-42c6-bef6-defe737339ee)
+
+## Contact
+
+To reach out to me, you have two options: either through the issues section or via Discord. My Discord user tag is `vipex.v`, or you can join the support server by clicking [here](https://discord.gg/xkS3Y5zV7c).
