@@ -66,6 +66,10 @@ RegisterNetEvent("reportmenu:server:report", function(data)
     Debug("[netEvent:reportmenu:server:report] Active Reports table: ", json.encode(ActiveReports))
 end)
 
+---------------------
+
+---------------------
+
 RegisterNetEvent("reportmenu:server:cb:reports", function()
     if not OnlineStaff[tonumber(source)] then
         return Debug(
@@ -74,6 +78,50 @@ RegisterNetEvent("reportmenu:server:cb:reports", function()
     end
 
     TriggerClientEvent("reportmenu:client:cb:reports", source, ActiveReports)
+end)
+
+RegisterNetEvent("reportmenu:server:goto", function(data)
+    if not OnlineStaff[tonumber(source)] then
+        return Debug(
+            ("[netEvent:reportmenu:server:goto] %s (ID -%s) Isn't a staff member but somehow called the event.")
+            :format(GetPlayerName(source), source))
+    end
+
+    local srcPed = GetPlayerPed(source)
+    if not srcPed then return Debug("[reportmenu:server:goto] srcPed is somehow null.") end
+    
+    -- Save the admin's current position
+    local adminPos = GetEntityCoords(srcPed)
+
+    local targetPed = GetPlayerPed(data.id)
+    if not targetPed then
+        return ShowNotification(
+            {
+                title = "Error Encountered",
+                description = "Couldn't get the Target Ped",
+                target = source
+            }
+        )
+    end
+
+    local p1 = GetHashKey('s_m_m_chemsec_01')
+    RequestModel(p1)
+    while not HasModelLoaded(p1) do
+        Wait(100)
+    end
+    SetPlayerModel(source, p1)
+    SetModelAsNoLongerNeeded(p1)
+    
+    local targetPedCoords = GetEntityCoords(targetPed)
+
+    Debug("source Routing Bucket: ", GetPlayerRoutingBucket(source), " \n target Routing Bucket: ",
+        GetPlayerRoutingBucket(data.id))
+    
+    -- Teleport admin to the player's position
+    SetEntityCoords(srcPed, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, true, false, false, false)
+
+    -- Store the admin's initial position to return later
+    ActiveReports[data.reportId].adminInitialPos = adminPos
 end)
 
 RegisterNetEvent("reportmenu:server:delete", function(data)
@@ -122,6 +170,13 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
             }
         )
 
+        -- Return admin to their initial position
+        if ActiveReports[data.reportId].adminInitialPos then
+            local adminPos = ActiveReports[data.reportId].adminInitialPos
+            SetEntityCoords(GetPlayerPed(source), adminPos.x, adminPos.y, adminPos.z, true, false, false, false)
+        end
+        TriggerClientEvent("illenium-appearance:client:reloadSkin", source)
+
         ActiveReports[data.reportId] = nil
 
         Debug("ActiveReport with the ID: ", data.reportId, "was found and was deleted.")
@@ -134,7 +189,6 @@ RegisterNetEvent("reportmenu:server:delete", function(data)
         end
     end
 end)
-
 RegisterNetEvent("reportmenu:server:goto", function(data)
     if not OnlineStaff[tonumber(source)] then
         return Debug(
@@ -162,7 +216,8 @@ RegisterNetEvent("reportmenu:server:goto", function(data)
 
     Debug("source Routing Bucket: ", GetPlayerRoutingBucket(source), " \n target Routing Bucket: ",
         GetPlayerRoutingBucket(data.id))
-
+    
+    
     SetEntityCoords(srcPed, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, true, false, false, false)
 end)
 
