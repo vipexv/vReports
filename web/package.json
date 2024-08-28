@@ -5,21 +5,26 @@
     "type": "module",
     "version": "0.1.0",
     "scripts": {
-        "start": "vite",
-        "start:game": "vite build --watch",
+        "dev": "vite",
+        "watch": "vite build --watch",
         "build": "tsc && vite build",
         "preview": "vite preview"
     },
     "dependencies": {
         "@mantine/core": "^7.12.1",
         "@mantine/hooks": "^7.12.1",
+        "@radix-ui/react-checkbox": "^1.1.1",
+        "@radix-ui/react-dialog": "^1.1.1",
         "@radix-ui/react-dropdown-menu": "^2.1.1",
+        "@radix-ui/react-popover": "^1.1.1",
         "@radix-ui/react-select": "^2.1.1",
         "@radix-ui/react-separator": "^1.1.0",
         "@radix-ui/react-slot": "^1.1.0",
+        "@radix-ui/react-tooltip": "^1.1.2",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
-        "lucide-react": "^0.319.0",
+        "cmdk": "1.0.0",
+        "debounce": "^2.1.0",
         "million": "^2.6.4",
         "next-themes": "^0.2.1",
         "react": "^18.3.1",
@@ -30,8 +35,6 @@
         "tailwindcss-animate": "^1.0.7"
     },
     "devDependencies": {
-        "@semantic-release/git": "^10.0.1",
-        "@semantic-release/github": "^9.2.6",
         "@types/node": "^20.16.2",
         "@types/react": "^18.3.4",
         "@types/react-dom": "^18.3.0",

@@ -9,6 +9,16 @@ export default {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji'],
+
+      roboto: ['Roboto'],
+      oswald: ['Oswald', 'sans-serif'],
+      geist: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji'],
+      inter: ['Inter']
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -18,15 +28,15 @@ export default {
     },
     extend: {
       colors: {
-        border: "#454854",
+        border: "#363636",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: "#1e1e1e",
         foreground: "hsl(var(--foreground))",
-        primary: "#353542",
+        primary: "#a079ff",
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#262626",
+          foreground: "#363636",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

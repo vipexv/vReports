@@ -112,7 +112,7 @@ end
 VersionCheck = function(repository)
     local resource = GetInvokingResource() or GetCurrentResourceName()
 
-    local currentVersion = 'v1.0.7'
+    local currentVersion = 'v1.1.0'
 
     if currentVersion then
         currentVersion = currentVersion:match('%d+%.%d+%.%d+')
