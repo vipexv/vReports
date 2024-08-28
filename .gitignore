@@ -1,4 +1,5 @@
 # Compiled code
 web/dist
 sv_config.lua
+node_modules
 data.json
