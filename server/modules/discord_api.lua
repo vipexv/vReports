@@ -93,9 +93,5 @@ GetDiscordRoles = function(discord_id, player_id)
 
     local memberData = json.decode(fetchMemberData.data)
 
-    if not memberData.roles then
-        return Debug("[func:GetDiscordRoles] memberData.roles is nil.")
-    end
-
     return memberData.roles or {}
 end
