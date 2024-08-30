@@ -332,7 +332,7 @@ const App: React.FC = () => {
                                     )}
                                 </div>
                                 <p className="font-main flex justify-end m-2">
-                                    v1.1.0
+                                    v1.1.1
                                 </p>
                             </div>
                         </div>
