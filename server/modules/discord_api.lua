@@ -91,7 +91,7 @@ GetDiscordRoles = function(discord_id, player_id)
             SVConfig["Guild ID"], discord_id),
         {})
 
-    if not fetchMemberData.code ~= 200 then
+    if fetchMemberData.code ~= 200 then
         return Debug(error_codes_defined[fetchMemberData.code])
     end
 
