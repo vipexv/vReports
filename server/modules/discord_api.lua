@@ -16,28 +16,23 @@ local error_codes_defined = {
 
 local discordRequest = function(method, endpoint, jsondata, reason)
     local data = nil
-    PerformHttpRequest(("https://discord.com/api/%s"):format(endpoint), function(err, resultData, resultHeaders)
-            data = {
-                data = resultData,
-                code = err,
-                headers = resultHeaders
-            }
-        end, method, #jsondata > 0 and jsondata or "",
-        {
+    PerformHttpRequest(("https://discord.com/api/%s"):format(endpoint),
+        function(err, resultData, resultHeaders)
+            data = { data = resultData, code = err, headers = resultHeaders }
+        end, method, #jsondata > 0 and jsondata or "", {
             ["Content-Type"] = "application/json",
             ["Authorization"] = formattedToken,
             ["X-Audit-Log-Reason"] = reason
         })
 
-    while not data do
-        Wait(100)
-    end
+    while not data do Wait(100) end
 
     return data
 end
 
 GetGuildData = function()
-    local fetchGuildData = discordRequest("GET", ("guilds/%s"):format(SVConfig["Guild ID"]), {})
+    local fetchGuildData = discordRequest("GET", ("guilds/%s"):format(
+        SVConfig["Guild ID"]), {})
 
     if not fetchGuildData.code == 200 then
         return Debug(error_codes_defined[fetchGuildData.code])
@@ -52,10 +47,12 @@ GetDiscordAvatar = function(discord_id, player_id)
     local img_url = nil
 
     if not discord_id then
-        return Debug("[func:GetDiscordAvatar] called but the first param is nil.")
+        return Debug(
+            "[func:GetDiscordAvatar] called but the first param is nil.")
     end
 
-    local fetchMemberData = discordRequest("GET", ("users/%s"):format(discord_id), {})
+    local fetchMemberData = discordRequest("GET",
+        ("users/%s"):format(discord_id), {})
 
     if not fetchMemberData.code == 200 then
         return Debug(error_codes_defined[fetchMemberData.code])
@@ -67,11 +64,15 @@ GetDiscordAvatar = function(discord_id, player_id)
         return Debug("[func:GetDiscordAvatar] memberData is nil.")
     end
 
-    local isGif = (memberData.avatar:sub(1, 1) and memberData.avatar:sub(2, 2) == "_" and "gif" or "png")
+    local isGif =
+        (memberData.avatar:sub(1, 1) and memberData.avatar:sub(2, 2) == "_" and
+            "gif" or "png")
 
     Debug("[func:GetDiscordAvatar] isGif:", isGif)
 
-    img_url = ("https://cdn.discordapp.com/avatars/%s/%s.%s"):format(discord_id, memberData.avatar, isGif)
+    img_url = ("https://cdn.discordapp.com/avatars/%s/%s.%s"):format(discord_id,
+        memberData.avatar,
+        isGif)
 
     Debug("[func:GetDiscordAvatar] memberData: ", json.encode(memberData))
 
@@ -85,13 +86,26 @@ GetDiscordRoles = function(discord_id, player_id)
         return Debug("[func:GetDiscordRoles] first param is nil.")
     end
 
-    local fetchMemberData = discordRequest("GET", ("guilds/%s/members/%s"):format(SVConfig["Guild ID"], discord_id), {})
+    local fetchMemberData = discordRequest("GET",
+        ("guilds/%s/members/%s"):format(
+            SVConfig["Guild ID"], discord_id),
+        {})
 
-    if not fetchMemberData.code == 200 then
+    if not fetchMemberData.code ~= 200 then
         return Debug(error_codes_defined[fetchMemberData.code])
     end
 
-    local memberData = json.decode(fetchMemberData.data)
+    local memberRoles = {}
 
-    return memberData.roles or {}
+    if fetchMemberData.data then
+        local success, decodedData = pcall(json.decode, fetchMemberData.data)
+        if success and decodedData.roles then
+            memberRoles = decodedData.roles
+        else
+            Debug("[func:GetDiscordRoles] Failed to decode JSON data.")
+        end
+    end
+
+
+    return memberRoles
 end
